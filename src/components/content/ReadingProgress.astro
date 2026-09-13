@@ -1,0 +1,20 @@
+<div
+  id="reading-progress"
+  class="fixed inset-x-0 top-0 z-50 h-1 origin-left scale-x-0 bg-(--color-accent)"
+  aria-hidden="true"
+>
+</div>
+
+<script>
+  const bar = document.getElementById('reading-progress');
+
+  function update() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
+    bar?.style.setProperty('transform', `scaleX(${ratio})`);
+  }
+
+  document.addEventListener('scroll', update, { passive: true });
+  update();
+</script>

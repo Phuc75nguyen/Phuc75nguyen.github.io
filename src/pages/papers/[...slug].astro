@@ -1,0 +1,30 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import PaperLayout from '../../layouts/PaperLayout.astro';
+import { estimateReadingTime } from '../../lib/reading-time';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('papers', ({ data }) => !data.draft);
+  return papers.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const readingMinutes = estimateReadingTime(entry.body ?? '');
+
+const relatedEntries = await Promise.all(
+  entry.data.relatedPapers.map((slug) => getEntry('papers', slug)),
+);
+const relatedPapers = relatedEntries
+  .filter((related): related is NonNullable<typeof related> => related !== undefined)
+  .map((related) => ({ title: related.data.title, href: `/papers/${related.id}` }));
+---
+
+<PaperLayout
+  paper={entry.data}
+  headings={headings}
+  readingMinutes={readingMinutes}
+  relatedPapers={relatedPapers}
+>
+  <Content />
+</PaperLayout>

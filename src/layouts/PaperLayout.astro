@@ -1,0 +1,113 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import PaperMeta from '../components/content/PaperMeta.astro';
+import TableOfContents from '../components/content/TableOfContents.astro';
+import ReadingProgress from '../components/content/ReadingProgress.astro';
+import Badge from '../components/ui/Badge.astro';
+import Tag from '../components/ui/Tag.astro';
+import DotRating from '../components/ui/DotRating.astro';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface RelatedPaper {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  paper: CollectionEntry<'papers'>['data'];
+  headings: Heading[];
+  readingMinutes: number;
+  relatedPapers: RelatedPaper[];
+}
+
+const { paper, headings, readingMinutes, relatedPapers } = Astro.props;
+
+const STATUS_LABEL: Record<typeof paper.status, string> = {
+  reading: 'Đang đọc',
+  analyzed: 'Đã phân tích',
+  applied: 'Đã áp dụng',
+};
+---
+
+<BaseLayout title={paper.title} description={paper.tldr} room="lab">
+  <ReadingProgress />
+  <div class="flex gap-8">
+    <article class="min-w-0 flex-1">
+      <header class="mb-8 flex flex-col gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <Badge tone="accent">{paper.domain}</Badge>
+          <Badge tone="muted">{STATUS_LABEL[paper.status]}</Badge>
+          <span class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+            {readingMinutes} phút đọc
+          </span>
+        </div>
+        <h1 class="text-4xl font-semibold text-(--color-text)">{paper.title}</h1>
+        <p class="text-lg text-(--color-text-dim)">{paper.paperTitle}</p>
+        <div class="flex flex-wrap items-center gap-4">
+          <DotRating label="Độ khó" value={paper.difficulty} />
+          <DotRating label="Ảnh hưởng" value={paper.impact} />
+        </div>
+      </header>
+
+      <PaperMeta
+        authors={paper.authors}
+        venue={paper.venue}
+        year={paper.year}
+        arxivId={paper.arxivId}
+        paperUrl={paper.paperUrl}
+        codeUrl={paper.codeUrl}
+        localPdf={paper.localPdf}
+      />
+
+      <div class="prose mt-8">
+        <slot />
+      </div>
+
+      <blockquote
+        class="my-10 rounded-(--radius-card) border border-(--color-accent)/30 bg-(--color-surface) p-6 text-lg text-(--color-text)"
+      >
+        <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-accent)">Nhận định</p>
+        {paper.verdict}
+      </blockquote>
+
+      {
+        paper.tags.length > 0 && (
+          <div class="mb-10 flex flex-wrap gap-2">
+            {paper.tags.map((tag) => (
+              <Tag tag={tag} />
+            ))}
+          </div>
+        )
+      }
+
+      {
+        relatedPapers.length > 0 && (
+          <div class="border-t border-(--color-border) pt-6">
+            <p class="mb-3 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Bài liên quan</p>
+            <ul class="flex flex-col gap-2">
+              {relatedPapers.map((rp) => (
+                <li>
+                  <a href={rp.href} class="text-(--color-accent) hover:underline">
+                    {rp.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </article>
+
+    <aside class="hidden w-[240px] shrink-0 xl:block">
+      <div class="sticky top-8">
+        <TableOfContents headings={headings} />
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

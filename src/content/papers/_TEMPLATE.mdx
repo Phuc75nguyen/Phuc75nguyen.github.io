@@ -1,0 +1,138 @@
+---
+# ============================================================================
+# TEMPLATE — copy file nay, doi ten thanh mot-slug-khong-dau.mdx, dien lai
+# tung truong. Xoa file nay khong lam mat gi (no la vi du, draft: true).
+# Moi truong bat buoc phai co, Zod se lam build fail neu thieu/sai kieu.
+# ============================================================================
+
+# --- Dinh danh ---
+title: 'Tieu de bai phan tich (tieng Viet, do minh dat)'
+paperTitle: 'Ten goc cua paper (tieng Anh, dung nguyen van)'
+authors: ['Ten tac gia 1', 'Ten tac gia 2']
+venue: 'NeurIPS 2024' # tuy chon — bo dong nay neu khong co
+year: 2024
+arxivId: '2401.12345' # tuy chon
+# doi: '10.xxxx/...' # tuy chon
+paperUrl: 'https://arxiv.org/abs/2401.12345' # tuy chon
+codeUrl: 'https://github.com/tac-gia/repo' # tuy chon
+localPdf: 'Ten Domain Trong AI-Knowledge-Library/ten-file.pdf' # tuy chon, xem site.config.ts
+
+# --- Phan loai ---
+# domain phai la 1 trong 6 gia tri sau (dung chinh ta, sai la build fail):
+# 'LLM & VLM' | 'Computer Vision' | 'Agentic AI' | 'ML & MLOps'
+# | 'OCR & Document AI' | 'Applied AI'
+domain: 'ML & MLOps'
+tags: ['tag-mot', 'tag-hai']
+# series: 'Ten chuoi bai' # tuy chon — dat neu bai nay nam trong 1 series
+# order: 1 # tuy chon — thu tu trong series
+
+# --- Danh gia cua Phuc (day la phan tao gia tri that su) ---
+tldr: 'Toi da 280 ky tu: paper nay giai quyet van de gi, trong 1-2 cau.'
+verdict: 'Toi da 400 ky tu: nhan dinh rieng cua ban — co dang doc khong, vi sao. Se hien trong khoi trich dan lon cuoi bai.'
+difficulty: 3 # so nguyen 1 (de) -> 5 (rat kho)
+impact: 3 # so nguyen 1 -> 5, muc anh huong thuc te
+status: 'analyzed' # 'reading' | 'analyzed' | 'applied'
+relatedPapers: [] # slug (ten file khong duoi) cua cac paper lien quan da co
+
+# --- Metadata ---
+publishDate: 2024-01-01
+# updatedDate: 2024-02-01 # tuy chon — bo comment va dien ngay neu co sua lon
+featured: false
+draft: true # doi thanh false khi xong that
+---
+
+import Callout from '../../components/content/Callout.astro';
+
+## Bối cảnh
+
+{/*
+Trước paper này, người ta làm thế nào? Nghẽn ở đâu? 2-4 đoạn, đặt paper vào
+dòng thời gian — người đọc chưa biết gì về hướng nghiên cứu này cũng hiểu được.
+*/}
+
+## Vấn đề
+
+{/*
+Phát biểu bài toán một cách chính xác. Nêu rõ giả thiết (input là gì, output
+mong muốn là gì, ràng buộc nào được giả định trước). Nếu có công thức, dùng
+KaTeX: $f(x) = ...$ (inline) hoặc khối:
+
+$$
+\mathcal{L} = -\sum_i y_i \log(\hat{y}_i)
+$$
+*/}
+
+## Ý tưởng cốt lõi
+
+{/*
+Giải thích được trong 3 câu, KHÔNG dùng công thức. Nếu không viết nổi 3 câu
+đơn giản thì nghĩa là chưa hiểu paper đủ sâu để viết tiếp — quay lại đọc.
+*/}
+
+## Phương pháp
+
+{/*
+Kiến trúc, công thức, sơ đồ. Dùng Mermaid cho sơ đồ (render tĩnh lúc build),
+ví dụ:
+
+\`\`\`mermaid
+graph LR
+  A[Input] --> B[Xử lý]
+  B --> C[Output]
+\`\`\`
+
+Pseudo-code thì dùng code block bình thường, có thể đặt title:
+
+\`\`\`python title="pseudo.py"
+def forward(x):
+    return x
+\`\`\`
+*/}
+
+## Thực nghiệm & kết quả
+
+{/*
+Bảng số liệu chính (Markdown table), ablation quan trọng nhất — không cần
+chép lại toàn bộ bảng của paper, chỉ số nào chứng minh luận điểm thì giữ.
+
+| Model | Metric | Score |
+|---|---|---|
+| Baseline | ... | ... |
+| Đề xuất | ... | ... |
+*/}
+
+## Phản biện
+
+<Callout type="critique">
+{/*
+BẮT BUỘC, không được bỏ trống. Ít nhất 3 điểm yếu thật, có lập luận — không
+viết kiểu "cần thêm nghiên cứu". Giả định đáng ngờ nào paper dựa vào? Paper
+cố tình không nói gì? So sánh có công bằng không (baseline yếu, benchmark bị
+chọn lọc, chi phí compute không được nêu...)?
+*/}
+</Callout>
+
+## Ứng dụng thực tế
+
+<Callout type="application">
+{/*
+BẮT BUỘC. Góc nhìn MLOps engineer ở ngân hàng: áp dụng vào production được
+không? Chi phí inference? Độ trễ? Rào cản dữ liệu? Tuân thủ quy định? Nếu
+không áp dụng được thì nói thẳng vì sao, đừng vẽ ra một use case gượng ép.
+*/}
+</Callout>
+
+## Liên hệ
+
+{/*
+Nối với các paper khác qua trường `relatedPapers` ở frontmatter (điền slug
+vào đó, danh sách sẽ tự hiện ở cuối trang) — phần này viết 1 đoạn giải thích
+MỐI LIÊN HỆ đó là gì (kế thừa ý tưởng gì, khác biệt ở đâu).
+*/}
+
+## Tài nguyên
+
+- Paper gốc: xem nút "arXiv"/"Paper" ở đầu bài
+- Code: xem nút "Code" ở đầu bài (nếu tác giả public)
+- PDF lưu trong `AI-Knowledge-Library`: xem nút "PDF (local)" (nếu đã tải về)
+- Bài blog/note liên quan: {/* thêm link nếu có */}

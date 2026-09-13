@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @import './fonts.css';
+@import 'katex/dist/katex.min.css';
+@import './prose.css';
 
 /*
  * Design tokens (BLUEPRINT Muc 5.1). One shared component set, two rooms:

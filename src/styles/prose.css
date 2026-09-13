@@ -1,0 +1,115 @@
+/*
+ * Hand-rolled typography for long-form content (BLUEPRINT Muc 3.4). No
+ * Tailwind Typography plugin — it is not in the approved dependency list
+ * (Muc 3.1), and hand-rolling keeps every rule traceable to a token.
+ * Applied via class="prose" on the rendered MDX wrapper in *Layout.astro.
+ */
+.prose {
+  max-width: 68ch;
+  color: var(--color-text);
+  line-height: 1.75;
+}
+
+[data-room='hien'] .prose {
+  max-width: 62ch;
+  font-family: var(--font-serif);
+}
+
+.prose :is(h2, h3, h4) {
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+  font-weight: 600;
+  color: var(--color-text);
+  scroll-margin-top: 5rem;
+}
+
+.prose h2 {
+  font-size: var(--text-2xl);
+}
+
+.prose h3 {
+  font-size: var(--text-xl);
+}
+
+.prose h4 {
+  font-size: var(--text-lg);
+}
+
+.prose p {
+  margin-bottom: 1.25em;
+}
+
+.prose :is(ul, ol) {
+  margin-bottom: 1.25em;
+  padding-left: 1.5em;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.4em;
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.prose blockquote {
+  margin: 1.5em 0;
+  border-left: 3px solid var(--color-border);
+  padding-left: 1em;
+  color: var(--color-text-dim);
+  font-style: italic;
+}
+
+.prose table {
+  width: 100%;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.prose :is(th, td) {
+  border: 1px solid var(--color-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.prose th {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+.prose code:not(pre code) {
+  border-radius: 4px;
+  background: var(--color-surface);
+  padding: 0.15em 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+
+.prose hr {
+  margin: 2.5em 0;
+  border-color: var(--color-border);
+}
+
+.prose img {
+  border-radius: var(--radius-card);
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}

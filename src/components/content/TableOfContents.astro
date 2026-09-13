@@ -1,0 +1,66 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+// Only top-level sections (## in MDX) - the 9 required sections are all h2,
+// going deeper would clutter a sticky sidebar TOC.
+const items = headings.filter((h) => h.depth === 2);
+---
+
+{
+  items.length > 0 && (
+    <nav aria-label="Mục lục" class="text-sm">
+      <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Mục lục</p>
+      <ul class="flex flex-col gap-1 border-l border-(--color-border)">
+        {items.map((h) => (
+          <li>
+            <a
+              href={`#${h.slug}`}
+              data-toc-link
+              data-slug={h.slug}
+              class="-ml-px block border-l-2 border-transparent py-1 pl-3 text-(--color-text-dim) hover:text-(--color-text)"
+            >
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  const ACTIVE_LINK_CLASSES = ['border-l-(--color-accent)', 'text-(--color-accent)'];
+
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+  if (links.length > 0) {
+    const targets = Array.from(links)
+      .map((link) => document.getElementById(link.dataset.slug ?? ''))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const setActive = (id: string) => {
+      links.forEach((link) => {
+        const isActive = link.dataset.slug === id;
+        link.classList.toggle('border-transparent', !isActive);
+        ACTIVE_LINK_CLASSES.forEach((cls) => link.classList.toggle(cls, isActive));
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((entry) => entry.isIntersecting);
+        if (visible) setActive(visible.target.id);
+      },
+      { rootMargin: '-20% 0px -70% 0px' },
+    );
+    targets.forEach((el) => observer.observe(el));
+  }
+</script>

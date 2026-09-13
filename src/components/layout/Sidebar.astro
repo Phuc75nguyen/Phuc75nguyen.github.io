@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components';
 import Tag from '../ui/Tag.astro';
 import { AUTHOR, SOCIAL_LINKS, NAV_ITEMS, REPO_URL } from '../../site.config';
+import { getSiteStats, getRecentAcrossCollections, getPublished, getTopTags } from '../../lib/collections';
 
 interface Props {
   class?: string;
@@ -15,17 +16,23 @@ function isActive(href: string): boolean {
   return currentPath === href || currentPath.startsWith(`${href}/`);
 }
 
-// TODO(Phase 2): pull real counts from src/content collections once papers/
-// notes/essays/poems exist (BLUEPRINT Muc 5.3, khoi 4 "Chi so dong").
-const stats = { papers: 0, notes: 0, essays: 0, poems: 0 };
+// Khoi 4 "Chi so dong" (BLUEPRINT Muc 5.3) - tinh luc build tu content collection.
+const stats = await getSiteStats();
 
-// TODO(Phase 2): the 3 most recent entries across all 4 collections
-// (BLUEPRINT Muc 5.3, khoi 5 "Bai moi nhat").
-const latestPosts: { title: string; href: string }[] = [];
+// Khoi 5 "Bai moi nhat".
+const latestPosts = (await getRecentAcrossCollections(3)).map((item) => ({
+  title: item.title,
+  href: item.href,
+}));
 
-// TODO(Phase 3): the 8 most-used tags, once /tags exists
-// (BLUEPRINT Muc 5.3, khoi 6 "Tag noi bat").
-const topTags: string[] = [];
+// Khoi 6 "Tag noi bat" - poems khong co truong tags nen khong tinh vao day.
+// TODO(Phase 3): trang /tags chua ton tai, link Tag.astro se 404 den luc do.
+const [papersForTags, notesForTags, essaysForTags] = await Promise.all([
+  getPublished('papers'),
+  getPublished('notes'),
+  getPublished('essays'),
+]);
+const topTags = getTopTags([...papersForTags, ...notesForTags, ...essaysForTags], 8);
 ---
 
 <aside class:list={['flex flex-col gap-6 py-8', className]} aria-label="Thanh điều hướng chính">

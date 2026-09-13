@@ -1,0 +1,51 @@
+---
+import { Icon } from 'astro-icon/components';
+import { knowledgeLibraryPdfUrl } from '../../site.config';
+
+interface Props {
+  authors: string[];
+  venue?: string;
+  year: number;
+  arxivId?: string;
+  paperUrl?: string;
+  codeUrl?: string;
+  localPdf?: string;
+}
+
+const { authors, venue, year, arxivId, paperUrl, codeUrl, localPdf } = Astro.props;
+
+const links = [
+  arxivId && { label: 'arXiv', href: `https://arxiv.org/abs/${arxivId}`, icon: 'lucide:file-text' },
+  !arxivId && paperUrl && { label: 'Paper', href: paperUrl, icon: 'lucide:file-text' },
+  codeUrl && { label: 'Code', href: codeUrl, icon: 'lucide:github' },
+  localPdf && {
+    label: 'PDF (local)',
+    href: knowledgeLibraryPdfUrl(localPdf),
+    icon: 'lucide:file-down',
+  },
+].filter((link): link is { label: string; href: string; icon: string } => Boolean(link));
+---
+
+<div class="flex flex-col gap-3 border-b border-(--color-border) pb-6">
+  <p class="text-sm text-(--color-text-dim)">
+    {authors.join(', ')}
+    {venue ? ` · ${venue} ${year}` : ` · ${year}`}
+  </p>
+  {
+    links.length > 0 && (
+      <div class="flex flex-wrap gap-2">
+        {links.map((link) => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 rounded-full border border-(--color-border) px-3 py-1.5 text-sm text-(--color-text-dim) hover:border-(--color-accent)/40 hover:text-(--color-accent)"
+          >
+            <Icon name={link.icon} class="size-4" aria-hidden="true" />
+            {link.label}
+          </a>
+        ))}
+      </div>
+    )
+  }
+</div>
