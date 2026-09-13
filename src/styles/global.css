@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+/*
+ * Token nền tảng — bản đầy đủ (font, accent, [data-room='hien']...) sẽ được
+ * dựng ở Phase 1 (BLUEPRINT Mục 5.1). Phase 0 chỉ cần đủ để trang chào tạm
+ * dùng đúng màu nền tối, không hardcode hex trong markup.
+ */
+@theme {
+  --color-bg: #0a0d12;
+  --color-text: #e6eaf0;
+  --color-text-dim: #9ba6b4;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
