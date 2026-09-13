@@ -12,6 +12,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
+      - run: npx playwright install --with-deps chromium  # for rehype-mermaid at build time
       - run: npm run build          # build + npx pagefind
       - uses: actions/upload-pages-artifact@v3
         with: { path: ./dist }
