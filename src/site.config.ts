@@ -44,6 +44,9 @@ export const PAGINATION = {
   notesPerPage: 12,
 };
 
+// Repo của chính website này — sidebar footer trỏ về đây (BLUEPRINT Mục 5.3, khối 7).
+export const REPO_URL = 'https://github.com/Phuc75nguyen/Phuc75nguyen.github.io';
+
 // Kho lưu trữ PDF gốc — repo riêng, tách khỏi repo website (BLUEPRINT Mục 3.3).
 export const KNOWLEDGE_LIBRARY = {
   repo: 'https://github.com/Phuc75nguyen/AI-Knowledge-Library',

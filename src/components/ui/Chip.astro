@@ -1,0 +1,26 @@
+---
+interface Props {
+  /** Generic filter value read by client-side JS (e.g. a domain name). Phase 2 wires the behavior; this component only renders the control. */
+  value?: string;
+  active?: boolean;
+  class?: string;
+}
+
+const { value, active = false, class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  aria-pressed={active}
+  data-value={value}
+  class:list={[
+    'rounded-full border px-3 py-1.5 text-sm',
+    'motion-safe:transition-colors motion-safe:duration-150',
+    active
+      ? 'border-(--color-accent) bg-(--color-accent)/15 text-(--color-accent)'
+      : 'border-(--color-border) text-(--color-text-dim) hover:border-(--color-text-dim) hover:text-(--color-text)',
+    className,
+  ]}
+>
+  <slot />
+</button>

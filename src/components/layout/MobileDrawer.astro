@@ -1,0 +1,83 @@
+---
+import { Icon } from 'astro-icon/components';
+import Sidebar from './Sidebar.astro';
+import { AUTHOR } from '../../site.config';
+---
+
+<div class="lg:hidden">
+  <header
+    class="sticky top-0 z-30 flex items-center justify-between border-b border-(--color-border) bg-(--color-bg) px-4 py-3"
+  >
+    <a href="/" class="font-mono text-sm uppercase tracking-wide text-(--color-text)">{AUTHOR.name}</a>
+    <button
+      type="button"
+      id="drawer-open"
+      aria-expanded="false"
+      aria-controls="mobile-drawer"
+      class="rounded-md border border-(--color-border) p-2 text-(--color-text)"
+    >
+      <span class="sr-only">Mở menu điều hướng</span>
+      <Icon name="lucide:menu" class="size-5" aria-hidden="true" />
+    </button>
+  </header>
+
+  <div id="mobile-drawer" class="fixed inset-0 z-40 hidden" role="dialog" aria-modal="true" aria-label="Menu điều hướng">
+    <div id="drawer-overlay" class="absolute inset-0 bg-black/60"></div>
+    <div
+      id="drawer-panel"
+      class="relative flex h-full w-[85%] max-w-[320px] -translate-x-full flex-col overflow-y-auto bg-(--color-bg) px-4 shadow-xl motion-safe:transition-transform motion-safe:duration-200"
+    >
+      <div class="flex justify-end pt-4">
+        <button
+          type="button"
+          id="drawer-close"
+          class="rounded-md border border-(--color-border) p-2 text-(--color-text)"
+        >
+          <span class="sr-only">Đóng menu</span>
+          <Icon name="lucide:x" class="size-5" aria-hidden="true" />
+        </button>
+      </div>
+      <Sidebar class="pb-6" />
+    </div>
+  </div>
+</div>
+
+<script>
+  const openBtn = document.getElementById('drawer-open');
+  const closeBtn = document.getElementById('drawer-close');
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('drawer-overlay');
+  const panel = document.getElementById('drawer-panel');
+
+  function openDrawer() {
+    drawer?.classList.remove('hidden');
+    // next frame so the "hidden -> visible" transition can play
+    requestAnimationFrame(() => panel?.classList.remove('-translate-x-full'));
+    document.body.classList.add('overflow-hidden');
+    openBtn?.setAttribute('aria-expanded', 'true');
+    closeBtn?.focus();
+  }
+
+  function closeDrawer() {
+    panel?.classList.add('-translate-x-full');
+    document.body.classList.remove('overflow-hidden');
+    openBtn?.setAttribute('aria-expanded', 'false');
+    openBtn?.focus();
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      drawer?.classList.add('hidden');
+    } else {
+      setTimeout(() => drawer?.classList.add('hidden'), 200);
+    }
+  }
+
+  openBtn?.addEventListener('click', openDrawer);
+  closeBtn?.addEventListener('click', closeDrawer);
+  overlay?.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !drawer?.classList.contains('hidden')) {
+      closeDrawer();
+    }
+  });
+</script>

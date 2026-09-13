@@ -1,18 +1,14 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { AUTHOR } from '../site.config';
 ---
 
-<html lang="vi">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{AUTHOR.name}</title>
-  </head>
-  <body class="flex min-h-screen items-center justify-center">
-    <div class="text-center">
-      <h1 class="text-3xl font-semibold">{AUTHOR.name}</h1>
-      <p class="mt-2 text-(--color-text-dim)">Đang xây dựng.</p>
-    </div>
-  </body>
-</html>
+<BaseLayout title={AUTHOR.name}>
+  <div class="flex min-h-[60vh] flex-col items-center justify-center gap-2 text-center">
+    <h1 class="text-4xl font-semibold text-(--color-text)">{AUTHOR.name}</h1>
+    <p class="text-(--color-text-dim)">{AUTHOR.tagline}</p>
+    <p class="mt-4 text-sm text-(--color-text-dim)">
+      Trang chủ đầy đủ (Hero, Featured Papers, Gần đây) sẽ hoàn thiện khi có nội dung thật ở Phase 2.
+    </p>
+  </div>
+</BaseLayout>

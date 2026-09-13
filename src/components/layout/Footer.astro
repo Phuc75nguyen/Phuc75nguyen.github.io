@@ -1,0 +1,14 @@
+---
+import { AUTHOR, REPO_URL } from '../../site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-(--color-border) px-4 py-6 text-xs text-(--color-text-dim) sm:px-6 lg:px-0">
+  <p>
+    © {year} {AUTHOR.name} ·
+    <a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="hover:text-(--color-text)">
+      Mã nguồn
+    </a>
+  </p>
+</footer>

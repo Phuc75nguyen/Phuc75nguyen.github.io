@@ -1,0 +1,22 @@
+---
+interface Props {
+  /** When set, the card renders as a link instead of a plain container. */
+  href?: string;
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'block rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) p-5',
+    'motion-safe:transition-transform motion-safe:duration-200 motion-safe:hover:-translate-y-0.5',
+    href && 'hover:border-(--color-accent)/40',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

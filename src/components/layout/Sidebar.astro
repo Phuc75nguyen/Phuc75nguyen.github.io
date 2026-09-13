@@ -1,0 +1,174 @@
+---
+import { Icon } from 'astro-icon/components';
+import Tag from '../ui/Tag.astro';
+import { AUTHOR, SOCIAL_LINKS, NAV_ITEMS, REPO_URL } from '../../site.config';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath === href || currentPath.startsWith(`${href}/`);
+}
+
+// TODO(Phase 2): pull real counts from src/content collections once papers/
+// notes/essays/poems exist (BLUEPRINT Muc 5.3, khoi 4 "Chi so dong").
+const stats = { papers: 0, notes: 0, essays: 0, poems: 0 };
+
+// TODO(Phase 2): the 3 most recent entries across all 4 collections
+// (BLUEPRINT Muc 5.3, khoi 5 "Bai moi nhat").
+const latestPosts: { title: string; href: string }[] = [];
+
+// TODO(Phase 3): the 8 most-used tags, once /tags exists
+// (BLUEPRINT Muc 5.3, khoi 6 "Tag noi bat").
+const topTags: string[] = [];
+---
+
+<aside class:list={['flex flex-col gap-6 py-8', className]} aria-label="Thanh điều hướng chính">
+  <!-- 1. Profile card -->
+  <div class="flex flex-col items-center gap-1 text-center">
+    <img
+      src={AUTHOR.avatar}
+      alt={`Ảnh đại diện của ${AUTHOR.name}`}
+      width="96"
+      height="96"
+      class="mb-2 rounded-full border border-(--color-border)"
+    />
+    <p class="font-mono text-sm uppercase tracking-wide text-(--color-text)">{AUTHOR.name}</p>
+    <p class="text-sm text-(--color-text-dim)">{AUTHOR.role}</p>
+    <p class="text-xs text-(--color-text-dim)">{AUTHOR.tagline}</p>
+  </div>
+
+  <!-- 2. Thông tin liên hệ (native <details> — hoạt động không cần JS) -->
+  <details class="rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) px-4 py-3">
+    <summary
+      class="flex cursor-pointer list-none items-center justify-between font-mono text-xs uppercase tracking-wide text-(--color-text)"
+    >
+      Thông tin liên hệ
+      <Icon name="lucide:chevron-down" class="size-4" aria-hidden="true" />
+    </summary>
+    <div class="mt-3 flex flex-col gap-2 text-sm text-(--color-text-dim)">
+      <a href={`mailto:${AUTHOR.email}`} class="flex items-center gap-2 hover:text-(--color-accent)">
+        <Icon name="lucide:mail" class="size-4 shrink-0" aria-hidden="true" />
+        {AUTHOR.email}
+      </a>
+      <p class="flex items-center gap-2">
+        <Icon name="lucide:map-pin" class="size-4 shrink-0" aria-hidden="true" />
+        {AUTHOR.location}
+      </p>
+      {
+        SOCIAL_LINKS.map((link) => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 hover:text-(--color-accent)"
+          >
+            <Icon name={link.icon} class="size-4 shrink-0" aria-hidden="true" />
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </details>
+
+  <!-- 3. Điều hướng chính -->
+  <nav aria-label="Điều hướng chính">
+    <ul class="flex flex-col gap-1">
+      {
+        NAV_ITEMS.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'block rounded-md border-l-2 px-3 py-2 text-sm',
+                isActive(item.href)
+                  ? 'border-(--color-accent) bg-(--color-surface) text-(--color-text)'
+                  : 'border-transparent text-(--color-text-dim) hover:text-(--color-text)',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <!-- 4. Chỉ số động -->
+  <div
+    class="rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) px-4 py-3 font-mono text-xs text-(--color-text-dim)"
+  >
+    <p>{stats.papers} papers phân tích</p>
+    <p>{stats.notes} notes</p>
+    <p>{stats.essays} essays</p>
+    <p>{stats.poems} bài thơ</p>
+  </div>
+
+  <!-- 5. Bài mới nhất -->
+  <div>
+    <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Bài mới nhất</p>
+    {
+      latestPosts.length === 0 ? (
+        <p class="text-sm text-(--color-text-dim)">Chưa có bài viết nào.</p>
+      ) : (
+        <ul class="flex flex-col gap-2">
+          {latestPosts.map((post) => (
+            <li>
+              <a href={post.href} class="text-sm text-(--color-text-dim) hover:text-(--color-text)">
+                {post.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+
+  <!-- 6. Tag nổi bật -->
+  <div>
+    <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Tag nổi bật</p>
+    {
+      topTags.length === 0 ? (
+        <p class="text-sm text-(--color-text-dim)">Chưa có tag nào.</p>
+      ) : (
+        <ul class="flex flex-wrap gap-2">
+          {topTags.map((tag) => (
+            <li>
+              <Tag tag={tag} />
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+
+  <!-- 7. Footer sidebar -->
+  <div class="mt-auto flex items-center justify-between border-t border-(--color-border) pt-4">
+    <button
+      type="button"
+      data-theme-toggle
+      class="rounded-md border border-(--color-border) p-2 text-(--color-text-dim) hover:text-(--color-text)"
+      aria-label="Chuyển giao diện sáng/tối"
+    >
+      <Icon name="lucide:moon" class="size-4" aria-hidden="true" />
+    </button>
+    <a href="/rss.xml" class="rounded-md border border-(--color-border) p-2 text-(--color-text-dim) hover:text-(--color-text)" aria-label="RSS">
+      <Icon name="lucide:rss" class="size-4" aria-hidden="true" />
+    </a>
+    <a
+      href={REPO_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="rounded-md border border-(--color-border) p-2 text-(--color-text-dim) hover:text-(--color-text)"
+      aria-label="Mã nguồn trên GitHub"
+    >
+      <Icon name="lucide:github" class="size-4" aria-hidden="true" />
+    </a>
+  </div>
+</aside>

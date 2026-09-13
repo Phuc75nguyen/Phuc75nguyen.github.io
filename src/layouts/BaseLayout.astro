@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+import Sidebar from '../components/layout/Sidebar.astro';
+import MobileDrawer from '../components/layout/MobileDrawer.astro';
+import Footer from '../components/layout/Footer.astro';
+import { SITE } from '../site.config';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** "lab" (papers/notes) is the default room; "hien" (essays/poems) swaps the accent tokens. BLUEPRINT Muc 5. */
+  room?: 'lab' | 'hien';
+}
+
+const { title, description = SITE.description, room = 'lab' } = Astro.props;
+const pageTitle = title === SITE.title ? SITE.title : `${title} · ${SITE.title}`;
+const canonicalURL = new URL(Astro.url.pathname, SITE.url);
+---
+
+<html lang="vi" data-room={room}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+  </head>
+  <body class="min-h-screen">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:border focus:border-(--color-accent) focus:bg-(--color-surface) focus:px-4 focus:py-2 focus:text-(--color-text)"
+    >
+      Bỏ qua, vào nội dung chính
+    </a>
+    <div class="mx-auto flex max-w-[1440px] lg:items-start lg:gap-8 lg:px-8">
+      <Sidebar
+        class="hidden lg:sticky lg:top-0 lg:block lg:h-screen lg:w-[280px] lg:shrink-0 lg:overflow-y-auto lg:px-2"
+      />
+      <MobileDrawer />
+      <div class="flex min-h-screen w-full flex-1 flex-col px-4 sm:px-6 lg:px-0">
+        <main id="main-content" class="flex-1 py-8">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+    </div>
+  </body>
+</html>
