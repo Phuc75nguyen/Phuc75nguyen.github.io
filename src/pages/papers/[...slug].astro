@@ -2,9 +2,10 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import PaperLayout from '../../layouts/PaperLayout.astro';
 import { estimateReadingTime } from '../../lib/reading-time';
+import { isPublishable } from '../../lib/collections';
 
 export async function getStaticPaths() {
-  const papers = await getCollection('papers', ({ data }) => !data.draft);
+  const papers = await getCollection('papers', ({ data }) => isPublishable(data.draft));
   return papers.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 

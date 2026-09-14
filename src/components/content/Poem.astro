@@ -1,0 +1,24 @@
+---
+/**
+ * Nhan noi dung tho qua PROP (chuoi JS), khong phai qua children markdown.
+ * Da kiem chung: dat van ban tho truc tiep trong than bai MDX (ke ca boc
+ * trong the <pre> tho thuong) van bi remark dien giai lai nhu markdown -
+ * gach dau dong, dau _.._ / *..*, dau # deu bi doi y nghia, pha vo tho.
+ * Chi truyen qua { text } (JS string, vd template literal) moi giu nguyen
+ * tuyet doi tung ky tu. Xem _TEMPLATE.mdx trong content/poems de biet cach
+ * viet dung.
+ */
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    'min-w-0 max-w-md whitespace-pre-wrap text-left font-serif text-xl leading-loose text-(--color-text)',
+    className,
+  ]}
+>{text}</div>

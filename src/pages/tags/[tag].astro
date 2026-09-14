@@ -3,12 +3,13 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Card from '../../components/ui/Card.astro';
 import { slugify } from '../../lib/slugify';
+import { isPublishable } from '../../lib/collections';
 
 export async function getStaticPaths() {
   const [papers, notes, essays] = await Promise.all([
-    getCollection('papers', ({ data }) => !data.draft),
-    getCollection('notes', ({ data }) => !data.draft),
-    getCollection('essays', ({ data }) => !data.draft),
+    getCollection('papers', ({ data }) => isPublishable(data.draft)),
+    getCollection('notes', ({ data }) => isPublishable(data.draft)),
+    getCollection('essays', ({ data }) => isPublishable(data.draft)),
   ]);
 
   const bySlug = new Map<string, string>();
@@ -27,9 +28,9 @@ export async function getStaticPaths() {
 const { tagName } = Astro.props;
 
 const [papers, notes, essays] = await Promise.all([
-  getCollection('papers', ({ data }) => !data.draft && data.tags.includes(tagName)),
-  getCollection('notes', ({ data }) => !data.draft && data.tags.includes(tagName)),
-  getCollection('essays', ({ data }) => !data.draft && data.tags.includes(tagName)),
+  getCollection('papers', ({ data }) => isPublishable(data.draft) && data.tags.includes(tagName)),
+  getCollection('notes', ({ data }) => isPublishable(data.draft) && data.tags.includes(tagName)),
+  getCollection('essays', ({ data }) => isPublishable(data.draft) && data.tags.includes(tagName)),
 ]);
 
 interface TaggedItem {

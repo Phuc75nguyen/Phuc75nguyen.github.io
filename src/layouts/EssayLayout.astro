@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import ReadingProgress from '../components/content/ReadingProgress.astro';
+import Tag from '../components/ui/Tag.astro';
+
+interface Props {
+  essay: CollectionEntry<'essays'>['data'];
+  readingMinutes: number;
+}
+
+const { essay, readingMinutes } = Astro.props;
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout title={essay.title} description={essay.subtitle ?? essay.title} room="hien">
+  <ReadingProgress />
+  <article class="mx-auto max-w-2xl">
+    <header class="mb-10 flex flex-col gap-2">
+      <p class="text-sm text-(--color-text-dim)">
+        {essay.theme} · {formatDate(essay.publishDate)} · {readingMinutes} phút đọc
+      </p>
+      <h1 class="font-serif text-4xl text-(--color-text)">{essay.title}</h1>
+      {essay.subtitle && <p class="font-serif text-lg text-(--color-text-dim)">{essay.subtitle}</p>}
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {
+      essay.tags.length > 0 && (
+        <div class="mt-10 flex flex-wrap gap-2 border-t border-(--color-border) pt-6">
+          {essay.tags.map((tag) => (
+            <Tag tag={tag} />
+          ))}
+        </div>
+      )
+    }
+  </article>
+</BaseLayout>

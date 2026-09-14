@@ -3,11 +3,12 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Card from '../../components/ui/Card.astro';
 import { slugify } from '../../lib/slugify';
+import { isPublishable } from '../../lib/collections';
 
 export async function getStaticPaths() {
   const [papers, notes] = await Promise.all([
-    getCollection('papers', ({ data }) => !data.draft && Boolean(data.series)),
-    getCollection('notes', ({ data }) => !data.draft && Boolean(data.series)),
+    getCollection('papers', ({ data }) => isPublishable(data.draft) && Boolean(data.series)),
+    getCollection('notes', ({ data }) => isPublishable(data.draft) && Boolean(data.series)),
   ]);
 
   const bySlug = new Map<string, string>();
@@ -24,8 +25,8 @@ export async function getStaticPaths() {
 const { seriesName } = Astro.props;
 
 const [papers, notes] = await Promise.all([
-  getCollection('papers', ({ data }) => !data.draft && data.series === seriesName),
-  getCollection('notes', ({ data }) => !data.draft && data.series === seriesName),
+  getCollection('papers', ({ data }) => isPublishable(data.draft) && data.series === seriesName),
+  getCollection('notes', ({ data }) => isPublishable(data.draft) && data.series === seriesName),
 ]);
 
 const entries = [

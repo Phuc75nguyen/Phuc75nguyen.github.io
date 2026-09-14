@@ -9,11 +9,20 @@ const TYPE_PATH: Record<ContentType, string> = {
   poems: '/poems',
 };
 
-/** Non-draft entries, newest first. The one query every listing page starts from. */
+/**
+ * Draft entries are visible in `npm run dev` but never in the production
+ * build (CLAUDE.md Muc 8.4) - so Phuc can preview a draft locally, including
+ * how it looks in listings/sidebar, before flipping draft: false.
+ */
+export function isPublishable(draft: boolean): boolean {
+  return import.meta.env.DEV || !draft;
+}
+
+/** Published-for-this-mode entries, newest first. The query every listing page starts from. */
 export async function getPublished<T extends ContentType>(
   collection: T,
 ): Promise<CollectionEntry<T>[]> {
-  const entries = await getCollection(collection, ({ data }) => !data.draft);
+  const entries = await getCollection(collection, ({ data }) => isPublishable(data.draft));
   return entries.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 }
 

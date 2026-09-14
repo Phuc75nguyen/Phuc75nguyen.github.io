@@ -1,0 +1,29 @@
+---
+title: 'Giữa hai màn hình'
+publishDate: 2026-09-14
+form: 'Tự do'
+draft: true
+---
+
+import Poem from '../../components/content/Poem.astro';
+
+{/* PLACEHOLDER — Phúc sẽ thay bằng bài của mình. Bài tự do, dùng để test PoemLayout với độ dài
+dòng không đều nhau. */}
+
+export const poemText = `Nửa đêm, terminal vẫn xanh
+lỗi cuối cùng đã được sửa
+tôi đóng laptop lại
+mở một trang giấy trắng
+
+không có function nào ở đây
+không có test nào phải pass
+chỉ có chữ, chậm rãi
+như một dòng code không cần chạy
+
+đôi khi tôi tự hỏi
+hai thứ ấy có gì giống nhau không —
+cả hai đều là cách
+tôi cố sắp xếp lại thế giới
+thành những dòng có nghĩa`;
+
+<Poem text={poemText} />

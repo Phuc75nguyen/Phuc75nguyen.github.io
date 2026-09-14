@@ -39,6 +39,14 @@
   --color-accent-2: #c97b5a;
 }
 
+/* Hien metadata is "khong mono, viet thuong, nhe nhang" (Muc 5), unlike
+   Lab's JetBrains Mono uppercase labels. Tag.astro stays one component -
+   this just swaps the font it reads via its stable class, same pattern
+   as the color tokens above. */
+[data-room='hien'] .tag-pill {
+  font-family: var(--font-sans);
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);

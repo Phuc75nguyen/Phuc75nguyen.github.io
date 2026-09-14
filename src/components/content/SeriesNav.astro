@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { slugify } from '../../lib/slugify';
+import { isPublishable } from '../../lib/collections';
 
 interface Props {
   collection: 'papers' | 'notes';
@@ -11,7 +12,7 @@ interface Props {
 const { collection, series, currentId } = Astro.props;
 const BASE_PATH = collection === 'papers' ? '/papers' : '/notes';
 
-const entries = (await getCollection(collection, ({ data }) => !data.draft && data.series === series))
+const entries = (await getCollection(collection, ({ data }) => isPublishable(data.draft) && data.series === series))
   .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
 const currentIndex = entries.findIndex((entry) => entry.id === currentId);
