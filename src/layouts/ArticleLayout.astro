@@ -5,6 +5,7 @@ import ReadingProgress from '../components/content/ReadingProgress.astro';
 import SeriesNav from '../components/content/SeriesNav.astro';
 import Badge from '../components/ui/Badge.astro';
 import Tag from '../components/ui/Tag.astro';
+import { buildBlogPosting } from '../lib/json-ld';
 
 interface Props {
   id: string;
@@ -17,11 +18,22 @@ const { id, note, readingMinutes } = Astro.props;
 function formatDate(date: Date): string {
   return date.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
 }
+
+const ogImage = `/og/notes/${id}.png`;
+const jsonLd = buildBlogPosting({
+  title: note.title,
+  description: note.description,
+  publishDate: note.publishDate,
+  updatedDate: note.updatedDate,
+  url: `/notes/${id}`,
+  image: ogImage,
+});
 ---
 
-<BaseLayout title={note.title} description={note.description} room="lab">
+<BaseLayout title={note.title} description={note.description} room="lab" ogImage={ogImage} jsonLd={jsonLd}>
   <ReadingProgress />
   <article class="mx-auto max-w-3xl">
+    <span data-pagefind-filter="type:Note" class="hidden"></span>
     <header class="mb-8 flex flex-col gap-3">
       <div class="flex flex-wrap items-center gap-2">
         <Badge tone="accent">{note.category}</Badge>

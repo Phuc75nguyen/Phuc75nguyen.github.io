@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Tìm kiếm" description="Tìm kiếm toàn văn trên toàn bộ site." room="lab">
+  <header class="mb-8">
+    <h1 class="text-4xl font-semibold text-(--color-text)">Tìm kiếm</h1>
+    <p class="mt-2 text-(--color-text-dim)">
+      Tìm trên toàn bộ nội dung site — papers, notes, essays, thơ.
+    </p>
+  </header>
+  <div id="search"></div>
+</BaseLayout>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (typeof PagefindUI === 'undefined') return;
+    new PagefindUI({
+      element: '#search',
+      showSubResults: true,
+      showImages: false,
+    });
+  });
+</script>

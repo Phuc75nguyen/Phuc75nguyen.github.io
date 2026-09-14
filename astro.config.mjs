@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import icon from 'astro-icon';
+import sitemap from '@astrojs/sitemap';
 import expressiveCode from 'astro-expressive-code';
 import tailwindcss from '@tailwindcss/vite';
 import { unified } from '@astrojs/markdown-remark';
@@ -30,7 +31,7 @@ const MERMAID_DARK_THEME = {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://phuc75nguyen.github.io',
-  integrations: [expressiveCode({ themes: ['github-dark'] }), mdx(), icon()],
+  integrations: [expressiveCode({ themes: ['github-dark'] }), mdx(), icon(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

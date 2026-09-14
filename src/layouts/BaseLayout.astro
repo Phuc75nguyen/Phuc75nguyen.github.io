@@ -10,20 +10,47 @@ interface Props {
   description?: string;
   /** "lab" (papers/notes) is the default room; "hien" (essays/poems) swaps the accent tokens. BLUEPRINT Muc 5. */
   room?: 'lab' | 'hien';
+  /** Relative path to a 1200x630 image - defaults to the site-wide generated one. */
+  ogImage?: string;
+  /** schema.org object for this page (ScholarlyArticle/BlogPosting/Person) - JSON.stringify'd verbatim. */
+  jsonLd?: Record<string, unknown>;
 }
 
-const { title, description = SITE.description, room = 'lab' } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  room = 'lab',
+  ogImage = '/og-default.png',
+  jsonLd,
+} = Astro.props;
 const pageTitle = title === SITE.title ? SITE.title : `${title} · ${SITE.title}`;
 const canonicalURL = new URL(Astro.url.pathname, SITE.url);
+const ogImageURL = new URL(ogImage, SITE.url);
 ---
 
 <html lang="vi" data-room={room}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body class="min-h-screen">
     <a
@@ -38,7 +65,7 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url);
       />
       <MobileDrawer />
       <div class="flex min-h-screen w-full flex-1 flex-col px-4 sm:px-6 lg:px-0">
-        <main id="main-content" class="flex-1 py-8">
+        <main id="main-content" data-pagefind-body class="flex-1 py-8">
           <slot />
         </main>
         <Footer />

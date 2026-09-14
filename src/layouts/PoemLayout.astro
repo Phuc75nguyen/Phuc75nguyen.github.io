@@ -3,22 +3,26 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 
 interface Props {
+  id: string;
   poem: CollectionEntry<'poems'>['data'];
 }
 
-const { poem } = Astro.props;
+const { id, poem } = Astro.props;
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
 }
+
+const ogImage = `/og/poems/${id}.png`;
 ---
 
-<BaseLayout title={poem.title} description={poem.note ?? poem.title} room="hien">
+<BaseLayout title={poem.title} description={poem.note ?? poem.title} room="hien" ogImage={ogImage}>
   <!--
     Khong ReadingProgress, khong TableOfContents o day - BLUEPRINT Muc 5.3:
     "Khong hien reading time, KHONG hien TOC - pha vo khong khi."
   -->
   <article class="mx-auto max-w-2xl">
+    <span data-pagefind-filter="type:Thơ" class="hidden"></span>
     <header class="mb-10 flex flex-col items-center gap-2 text-center">
       <span class="rounded-full border border-(--color-border) px-3 py-1 text-sm text-(--color-text-dim)">
         {poem.form}

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check"
@@ -13,6 +13,8 @@
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.1",
     "@astrojs/mdx": "^8.0.1",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.2",
     "astro-expressive-code": "^0.44.2",
@@ -21,11 +23,14 @@
     "rehype-katex": "^7.0.1",
     "rehype-mermaid": "^3.0.0",
     "remark-math": "^6.0.0",
+    "satori": "^0.33.4",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@iconify-json/lucide": "^1.2.132",
+    "pagefind": "^1.5.2",
     "playwright": "^1.63.0",
     "typescript": "^5.9.3"
   }

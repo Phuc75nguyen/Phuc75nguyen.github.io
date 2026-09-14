@@ -3,22 +3,40 @@ import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import ReadingProgress from '../components/content/ReadingProgress.astro';
 import Tag from '../components/ui/Tag.astro';
+import { buildBlogPosting } from '../lib/json-ld';
 
 interface Props {
+  id: string;
   essay: CollectionEntry<'essays'>['data'];
   readingMinutes: number;
 }
 
-const { essay, readingMinutes } = Astro.props;
+const { id, essay, readingMinutes } = Astro.props;
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
 }
+
+const ogImage = `/og/essays/${id}.png`;
+const jsonLd = buildBlogPosting({
+  title: essay.title,
+  description: essay.subtitle ?? essay.title,
+  publishDate: essay.publishDate,
+  url: `/essays/${id}`,
+  image: ogImage,
+});
 ---
 
-<BaseLayout title={essay.title} description={essay.subtitle ?? essay.title} room="hien">
+<BaseLayout
+  title={essay.title}
+  description={essay.subtitle ?? essay.title}
+  room="hien"
+  ogImage={ogImage}
+  jsonLd={jsonLd}
+>
   <ReadingProgress />
   <article class="mx-auto max-w-2xl">
+    <span data-pagefind-filter="type:Essay" class="hidden"></span>
     <header class="mb-10 flex flex-col gap-2">
       <p class="text-sm text-(--color-text-dim)">
         {essay.theme} · {formatDate(essay.publishDate)} · {readingMinutes} phút đọc

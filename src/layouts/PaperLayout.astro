@@ -8,6 +8,7 @@ import SeriesNav from '../components/content/SeriesNav.astro';
 import Badge from '../components/ui/Badge.astro';
 import Tag from '../components/ui/Tag.astro';
 import DotRating from '../components/ui/DotRating.astro';
+import { buildScholarlyArticle } from '../lib/json-ld';
 
 interface Heading {
   depth: number;
@@ -35,12 +36,25 @@ const STATUS_LABEL: Record<typeof paper.status, string> = {
   analyzed: 'Đã phân tích',
   applied: 'Đã áp dụng',
 };
+
+const ogImage = `/og/papers/${id}.png`;
+const jsonLd = buildScholarlyArticle({
+  title: paper.title,
+  description: paper.tldr,
+  authors: paper.authors,
+  publishDate: paper.publishDate,
+  updatedDate: paper.updatedDate,
+  url: `/papers/${id}`,
+  image: ogImage,
+  keywords: paper.tags,
+});
 ---
 
-<BaseLayout title={paper.title} description={paper.tldr} room="lab">
+<BaseLayout title={paper.title} description={paper.tldr} room="lab" ogImage={ogImage} jsonLd={jsonLd}>
   <ReadingProgress />
   <div class="flex gap-8">
     <article class="min-w-0 flex-1">
+      <span data-pagefind-filter="type:Paper" class="hidden"></span>
       <header class="mb-8 flex flex-col gap-3">
         <div class="flex flex-wrap items-center gap-2">
           <Badge tone="accent">{paper.domain}</Badge>
