@@ -63,6 +63,7 @@ export async function GET(context: APIContext) {
     description: SITE.description,
     site: context.site ?? SITE.url,
     items,
-    customData: '<language>vi</language>',
+    xmlns: { atom: 'http://www.w3.org/2005/Atom' },
+    customData: `<language>vi</language><atom:link href="${new URL('/rss.xml', SITE.url)}" rel="self" type="application/rss+xml" />`,
   });
 }
