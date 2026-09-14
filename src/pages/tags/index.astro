@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublished } from '../../lib/collections';
+import { slugify } from '../../lib/slugify';
+
+// Poems has no `tags` field in its schema (BLUEPRINT Muc 4.4) - only these 3 count.
+const [papers, notes, essays] = await Promise.all([
+  getPublished('papers'),
+  getPublished('notes'),
+  getPublished('essays'),
+]);
+
+const counts = new Map<string, number>();
+for (const entry of [...papers, ...notes, ...essays]) {
+  for (const tag of entry.data.tags ?? []) {
+    counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+}
+
+const tags = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+const maxCount = tags.length > 0 ? tags[0][1] : 1;
+
+// Co chu theo tan suat, gioi han trong thang da chot (Muc 5.2): base/lg/xl/2xl/3xl.
+function sizeClass(count: number): string {
+  const ratio = count / maxCount;
+  if (ratio >= 0.8) return 'text-3xl';
+  if (ratio >= 0.6) return 'text-2xl';
+  if (ratio >= 0.4) return 'text-xl';
+  if (ratio >= 0.2) return 'text-lg';
+  return 'text-base';
+}
+---
+
+<BaseLayout title="Tags" description="Toàn bộ tag đang dùng trên site, cỡ chữ theo tần suất." room="lab">
+  <header class="mb-8">
+    <h1 class="text-4xl font-semibold text-(--color-text)">Tags</h1>
+  </header>
+  {
+    tags.length === 0 ? (
+      <p class="text-(--color-text-dim)">Chưa có tag nào.</p>
+    ) : (
+      <div class="flex flex-wrap items-baseline gap-x-5 gap-y-3">
+        {tags.map(([tag, count]) => (
+          <a
+            href={`/tags/${slugify(tag)}`}
+            class:list={[sizeClass(count), 'text-(--color-text-dim) hover:text-(--color-accent)']}
+          >
+            #{tag}
+            <span class="ml-1 font-mono text-xs text-(--color-text-dim)">{count}</span>
+          </a>
+        ))}
+      </div>
+    )
+  }
+</BaseLayout>

@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/ui/Card.astro';
+import { slugify } from '../../lib/slugify';
+
+export async function getStaticPaths() {
+  const [papers, notes] = await Promise.all([
+    getCollection('papers', ({ data }) => !data.draft && Boolean(data.series)),
+    getCollection('notes', ({ data }) => !data.draft && Boolean(data.series)),
+  ]);
+
+  const bySlug = new Map<string, string>();
+  for (const entry of [...papers, ...notes]) {
+    if (entry.data.series) bySlug.set(slugify(entry.data.series), entry.data.series);
+  }
+
+  return Array.from(bySlug.entries()).map(([slug, seriesName]) => ({
+    params: { series: slug },
+    props: { seriesName },
+  }));
+}
+
+const { seriesName } = Astro.props;
+
+const [papers, notes] = await Promise.all([
+  getCollection('papers', ({ data }) => !data.draft && data.series === seriesName),
+  getCollection('notes', ({ data }) => !data.draft && data.series === seriesName),
+]);
+
+const entries = [
+  ...papers.map((entry) => ({
+    title: entry.data.title,
+    href: `/papers/${entry.id}`,
+    order: entry.data.order ?? 0,
+    description: entry.data.tldr,
+  })),
+  ...notes.map((entry) => ({
+    title: entry.data.title,
+    href: `/notes/${entry.id}`,
+    order: entry.data.order ?? 0,
+    description: entry.data.description,
+  })),
+].sort((a, b) => a.order - b.order);
+---
+
+<BaseLayout title={seriesName} description={`Chuỗi bài: ${seriesName}`} room="lab">
+  <header class="mb-8">
+    <p class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Series</p>
+    <h1 class="text-4xl font-semibold text-(--color-text)">{seriesName}</h1>
+    <p class="mt-2 text-(--color-text-dim)">{entries.length} bài trong chuỗi này.</p>
+  </header>
+  <ol class="flex flex-col gap-4">
+    {
+      entries.map((entry, i) => (
+        <li>
+          <Card href={entry.href} class="flex items-baseline gap-3">
+            <span class="font-mono text-sm text-(--color-text-dim)">{i + 1}.</span>
+            <div>
+              <h2 class="font-semibold text-(--color-text)">{entry.title}</h2>
+              <p class="text-sm text-(--color-text-dim)">{entry.description}</p>
+            </div>
+          </Card>
+        </li>
+      ))
+    }
+  </ol>
+</BaseLayout>

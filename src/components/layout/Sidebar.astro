@@ -26,7 +26,6 @@ const latestPosts = (await getRecentAcrossCollections(3)).map((item) => ({
 }));
 
 // Khoi 6 "Tag noi bat" - poems khong co truong tags nen khong tinh vao day.
-// TODO(Phase 3): trang /tags chua ton tai, link Tag.astro se 404 den luc do.
 const [papersForTags, notesForTags, essaysForTags] = await Promise.all([
   getPublished('papers'),
   getPublished('notes'),

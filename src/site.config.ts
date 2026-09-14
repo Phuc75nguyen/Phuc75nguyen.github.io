@@ -40,6 +40,14 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'About', href: '/about' },
 ];
 
+// Trang phụ (Mục 6.5) - không thuộc 6 mục điều hướng chính đã chốt ở Mục 5.3,
+// nhưng vẫn cần một lối vào từ UI thay vì chỉ gõ thẳng URL. Đặt ở Footer.astro.
+export const SECONDARY_NAV_ITEMS: NavItem[] = [
+  { label: 'Tags', href: '/tags' },
+  { label: 'Archive', href: '/archive' },
+  { label: 'Bảng ký hiệu toán', href: '/math' },
+];
+
 export const PAGINATION = {
   notesPerPage: 12,
 };

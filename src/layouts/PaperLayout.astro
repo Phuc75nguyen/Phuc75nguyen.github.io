@@ -4,6 +4,7 @@ import BaseLayout from './BaseLayout.astro';
 import PaperMeta from '../components/content/PaperMeta.astro';
 import TableOfContents from '../components/content/TableOfContents.astro';
 import ReadingProgress from '../components/content/ReadingProgress.astro';
+import SeriesNav from '../components/content/SeriesNav.astro';
 import Badge from '../components/ui/Badge.astro';
 import Tag from '../components/ui/Tag.astro';
 import DotRating from '../components/ui/DotRating.astro';
@@ -20,13 +21,14 @@ interface RelatedPaper {
 }
 
 interface Props {
+  id: string;
   paper: CollectionEntry<'papers'>['data'];
   headings: Heading[];
   readingMinutes: number;
   relatedPapers: RelatedPaper[];
 }
 
-const { paper, headings, readingMinutes, relatedPapers } = Astro.props;
+const { id, paper, headings, readingMinutes, relatedPapers } = Astro.props;
 
 const STATUS_LABEL: Record<typeof paper.status, string> = {
   reading: 'Đang đọc',
@@ -75,6 +77,8 @@ const STATUS_LABEL: Record<typeof paper.status, string> = {
         <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-accent)">Nhận định</p>
         {paper.verdict}
       </blockquote>
+
+      {paper.series && <SeriesNav collection="papers" series={paper.series} currentId={id} />}
 
       {
         paper.tags.length > 0 && (

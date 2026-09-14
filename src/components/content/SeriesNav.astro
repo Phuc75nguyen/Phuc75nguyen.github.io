@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import { slugify } from '../../lib/slugify';
+
+interface Props {
+  collection: 'papers' | 'notes';
+  series: string;
+  currentId: string;
+}
+
+const { collection, series, currentId } = Astro.props;
+const BASE_PATH = collection === 'papers' ? '/papers' : '/notes';
+
+const entries = (await getCollection(collection, ({ data }) => !data.draft && data.series === series))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+const currentIndex = entries.findIndex((entry) => entry.id === currentId);
+const prev = currentIndex > 0 ? entries[currentIndex - 1] : undefined;
+const next = currentIndex >= 0 && currentIndex < entries.length - 1 ? entries[currentIndex + 1] : undefined;
+---
+
+{
+  entries.length > 1 && currentIndex >= 0 && (
+    <nav
+      aria-label={`Điều hướng series ${series}`}
+      class="my-8 rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) p-4"
+    >
+      <p class="mb-3 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+        <a href={`/series/${slugify(series)}`} class="hover:text-(--color-accent)">
+          {series}
+        </a>
+        {' · '}Bài {currentIndex + 1}/{entries.length}
+      </p>
+      <div class="flex items-center justify-between gap-4 text-sm">
+        {prev ? (
+          <a href={`${BASE_PATH}/${prev.id}`} class="text-(--color-text-dim) hover:text-(--color-accent)">
+            ← {prev.data.title}
+          </a>
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <a href={`${BASE_PATH}/${next.id}`} class="text-right text-(--color-text-dim) hover:text-(--color-accent)">
+            {next.data.title} →
+          </a>
+        ) : (
+          <span />
+        )}
+      </div>
+    </nav>
+  )
+}

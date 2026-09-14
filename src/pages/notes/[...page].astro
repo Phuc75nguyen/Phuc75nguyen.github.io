@@ -1,0 +1,155 @@
+---
+import type { PaginateFunction } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/ui/Card.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Chip from '../../components/ui/Chip.astro';
+import { getPublished } from '../../lib/collections';
+import { PAGINATION } from '../../site.config';
+
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  const notes = await getPublished('notes');
+  return paginate(notes, { pageSize: PAGINATION.notesPerPage });
+}
+
+const { page } = Astro.props;
+
+const CATEGORIES = [
+  'MLOps',
+  'Data Engineering',
+  'Deep Learning',
+  'System Design',
+  'Tooling',
+  'Career',
+] as const;
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout
+  title="Notes"
+  description="Ghi chép kỹ thuật: kinh nghiệm production, debug story, so sánh công cụ."
+  room="lab"
+>
+  <header class="mb-8">
+    <h1 class="text-4xl font-semibold text-(--color-text)">Notes</h1>
+    <p class="mt-2 max-w-3xl text-(--color-text-dim)">
+      Ghi chép kỹ thuật từ thực tế vận hành — kinh nghiệm production, debug story, so sánh công cụ.
+    </p>
+  </header>
+
+  <div
+    id="category-filters"
+    class="mb-6 flex flex-wrap gap-2"
+    role="group"
+    aria-label="Lọc theo chuyên mục"
+  >
+    <Chip value="all" active={true} class="js-filter-chip">Tất cả</Chip>
+    {CATEGORIES.map((category) => (
+      <Chip value={category} class="js-filter-chip">{category}</Chip>
+    ))}
+  </div>
+
+  <noscript>
+    <p class="mb-6 rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) p-4 text-sm text-(--color-text-dim)">
+      JavaScript đang tắt — danh sách dưới đây hiển thị toàn bộ, chưa lọc được.
+    </p>
+  </noscript>
+
+  {
+    page.data.length === 0 ? (
+      <p class="text-(--color-text-dim)">Chưa có ghi chép nào.</p>
+    ) : (
+      <div class="flex flex-col gap-4">
+        {page.data.map((entry) => (
+          <div class="js-note-item" data-category={entry.data.category}>
+            <Card href={`/notes/${entry.id}`} class="flex flex-col gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <Badge tone="accent">{entry.data.category}</Badge>
+                <span class="font-mono text-xs text-(--color-text-dim)">
+                  {formatDate(entry.data.publishDate)}
+                </span>
+              </div>
+              <h2 class="text-lg font-semibold text-(--color-text)">{entry.data.title}</h2>
+              <p class="text-sm text-(--color-text-dim)">{entry.data.description}</p>
+            </Card>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  <p id="empty-state" class="mt-6 hidden text-(--color-text-dim)">Không có ghi chép nào khớp bộ lọc.</p>
+
+  {
+    page.lastPage > 1 && (
+      <nav aria-label="Phân trang" class="mt-10 flex items-center justify-between text-sm">
+        {page.url.prev ? (
+          <a href={page.url.prev} class="text-(--color-accent) hover:underline">
+            ← Trang trước
+          </a>
+        ) : (
+          <span />
+        )}
+        <span class="text-(--color-text-dim)">
+          Trang {page.currentPage}/{page.lastPage}
+        </span>
+        {page.url.next ? (
+          <a href={page.url.next} class="text-(--color-accent) hover:underline">
+            Trang sau →
+          </a>
+        ) : (
+          <span />
+        )}
+      </nav>
+    )
+  }
+</BaseLayout>
+
+<script>
+  const CHIP_ACTIVE = ['border-(--color-accent)', 'bg-(--color-accent)/15', 'text-(--color-accent)'];
+  const CHIP_INACTIVE = ['border-(--color-border)', 'text-(--color-text-dim)'];
+
+  const params = new URLSearchParams(window.location.search);
+  let currentCategory = params.get('category') ?? 'all';
+
+  const chips = document.querySelectorAll<HTMLButtonElement>('.js-filter-chip');
+  const items = document.querySelectorAll<HTMLElement>('.js-note-item');
+  const emptyState = document.getElementById('empty-state');
+
+  function applyFilter() {
+    let visibleCount = 0;
+    items.forEach((item) => {
+      const matches = currentCategory === 'all' || item.dataset.category === currentCategory;
+      item.classList.toggle('hidden', !matches);
+      if (matches) visibleCount += 1;
+    });
+    emptyState?.classList.toggle('hidden', visibleCount > 0);
+
+    chips.forEach((chip) => {
+      const isActive = chip.dataset.value === currentCategory;
+      chip.setAttribute('aria-pressed', String(isActive));
+      CHIP_ACTIVE.forEach((cls) => chip.classList.toggle(cls, isActive));
+      CHIP_INACTIVE.forEach((cls) => chip.classList.toggle(cls, !isActive));
+    });
+  }
+
+  function syncUrl() {
+    const next = new URLSearchParams();
+    if (currentCategory !== 'all') next.set('category', currentCategory);
+    const query = next.toString();
+    history.replaceState(null, '', query ? `?${query}` : window.location.pathname);
+  }
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      currentCategory = chip.dataset.value ?? 'all';
+      applyFilter();
+      syncUrl();
+    });
+  });
+
+  applyFilter();
+</script>

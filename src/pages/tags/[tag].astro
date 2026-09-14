@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Card from '../../components/ui/Card.astro';
+import { slugify } from '../../lib/slugify';
+
+export async function getStaticPaths() {
+  const [papers, notes, essays] = await Promise.all([
+    getCollection('papers', ({ data }) => !data.draft),
+    getCollection('notes', ({ data }) => !data.draft),
+    getCollection('essays', ({ data }) => !data.draft),
+  ]);
+
+  const bySlug = new Map<string, string>();
+  for (const entry of [...papers, ...notes, ...essays]) {
+    for (const tag of entry.data.tags ?? []) {
+      bySlug.set(slugify(tag), tag);
+    }
+  }
+
+  return Array.from(bySlug.entries()).map(([slug, tagName]) => ({
+    params: { tag: slug },
+    props: { tagName },
+  }));
+}
+
+const { tagName } = Astro.props;
+
+const [papers, notes, essays] = await Promise.all([
+  getCollection('papers', ({ data }) => !data.draft && data.tags.includes(tagName)),
+  getCollection('notes', ({ data }) => !data.draft && data.tags.includes(tagName)),
+  getCollection('essays', ({ data }) => !data.draft && data.tags.includes(tagName)),
+]);
+
+interface TaggedItem {
+  title: string;
+  href: string;
+  description: string;
+  date: Date;
+}
+
+const items: TaggedItem[] = [
+  ...papers.map(
+    (entry): TaggedItem => ({
+      title: entry.data.title,
+      href: `/papers/${entry.id}`,
+      description: entry.data.tldr,
+      date: entry.data.publishDate,
+    }),
+  ),
+  ...notes.map(
+    (entry): TaggedItem => ({
+      title: entry.data.title,
+      href: `/notes/${entry.id}`,
+      description: entry.data.description,
+      date: entry.data.publishDate,
+    }),
+  ),
+  ...essays.map(
+    (entry): TaggedItem => ({
+      title: entry.data.title,
+      href: `/essays/${entry.id}`,
+      description: entry.data.subtitle ?? '',
+      date: entry.data.publishDate,
+    }),
+  ),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+---
+
+<BaseLayout title={`#${tagName}`} description={`Bài viết gắn tag #${tagName}`} room="lab">
+  <header class="mb-8">
+    <p class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Tag</p>
+    <h1 class="text-4xl font-semibold text-(--color-text)">#{tagName}</h1>
+    <p class="mt-2 text-(--color-text-dim)">{items.length} bài viết.</p>
+  </header>
+  <div class="flex flex-col gap-4">
+    {
+      items.map((item) => (
+        <Card href={item.href}>
+          <h2 class="font-semibold text-(--color-text)">{item.title}</h2>
+          {item.description && <p class="mt-1 text-sm text-(--color-text-dim)">{item.description}</p>}
+        </Card>
+      ))
+    }
+  </div>
+</BaseLayout>

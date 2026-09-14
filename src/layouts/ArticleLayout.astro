@@ -1,0 +1,52 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import ReadingProgress from '../components/content/ReadingProgress.astro';
+import SeriesNav from '../components/content/SeriesNav.astro';
+import Badge from '../components/ui/Badge.astro';
+import Tag from '../components/ui/Tag.astro';
+
+interface Props {
+  id: string;
+  note: CollectionEntry<'notes'>['data'];
+  readingMinutes: number;
+}
+
+const { id, note, readingMinutes } = Astro.props;
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout title={note.title} description={note.description} room="lab">
+  <ReadingProgress />
+  <article class="mx-auto max-w-3xl">
+    <header class="mb-8 flex flex-col gap-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <Badge tone="accent">{note.category}</Badge>
+        <span class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+          {formatDate(note.publishDate)} · {readingMinutes} phút đọc
+        </span>
+      </div>
+      <h1 class="text-4xl font-semibold text-(--color-text)">{note.title}</h1>
+      <p class="text-lg text-(--color-text-dim)">{note.description}</p>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {note.series && <SeriesNav collection="notes" series={note.series} currentId={id} />}
+
+    {
+      note.tags.length > 0 && (
+        <div class="mt-10 flex flex-wrap gap-2 border-t border-(--color-border) pt-6">
+          {note.tags.map((tag) => (
+            <Tag tag={tag} />
+          ))}
+        </div>
+      )
+    }
+  </article>
+</BaseLayout>
