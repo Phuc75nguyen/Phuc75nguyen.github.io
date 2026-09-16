@@ -1,14 +1,38 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import StatStrip from '../components/home/StatStrip.astro';
+import FeaturedGrid from '../components/home/FeaturedGrid.astro';
+import RecentList from '../components/home/RecentList.astro';
 import { AUTHOR } from '../site.config';
 ---
 
 <BaseLayout title={AUTHOR.name}>
-  <div class="flex min-h-[60vh] flex-col items-center justify-center gap-2 text-center">
-    <h1 class="text-4xl font-semibold text-(--color-text)">{AUTHOR.name}</h1>
-    <p class="text-(--color-text-dim)">{AUTHOR.tagline}</p>
-    <p class="mt-4 text-sm text-(--color-text-dim)">
-      Trang chủ đầy đủ (Hero, Featured Papers, Gần đây) sẽ hoàn thiện khi có nội dung thật ở Phase 2.
-    </p>
-  </div>
+  <Hero />
+  <StatStrip />
+  <FeaturedGrid />
+  <RecentList />
+
+  <section data-reveal class="grid grid-cols-1 gap-6 py-10 sm:grid-cols-2">
+    <a
+      href="/papers"
+      class="rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) p-8 motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
+    >
+      <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-accent)">Lab</p>
+      <h2 class="mb-2 text-2xl font-semibold text-(--color-text)">Papers &amp; Notes</h2>
+      <p class="text-(--color-text-dim)">
+        Phân tích paper AI/ML sâu, kèm phản biện và đánh giá khả năng ứng dụng thực tế. Ghi chép kỹ
+        thuật từ production.
+      </p>
+    </a>
+    <a
+      href="/essays"
+      data-room="hien"
+      class="rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) p-8 motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
+    >
+      <p class="mb-2 text-xs uppercase tracking-wide text-(--color-accent)">Hiên</p>
+      <h2 class="mb-2 font-serif text-2xl text-(--color-text)">Essays &amp; Thơ</h2>
+      <p class="font-serif text-(--color-text-dim)">Chiêm nghiệm, văn hóa, và thơ.</p>
+    </a>
+  </section>
 </BaseLayout>

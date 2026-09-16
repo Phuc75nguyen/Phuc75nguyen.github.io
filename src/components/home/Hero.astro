@@ -1,0 +1,26 @@
+---
+import { AUTHOR } from '../../site.config';
+---
+
+<!-- No data-reveal: Hero is already in the initial viewport on load, so
+     "fade up on scroll into view" doesn't apply - and hiding it at
+     opacity:0 until IntersectionObserver fires was delaying the measured
+     LCP timestamp for no real user-facing benefit. -->
+<section class="flex flex-col items-center gap-6 py-16 text-center">
+  <h1 class="text-5xl font-semibold text-(--color-text)">{AUTHOR.name}</h1>
+  <p class="max-w-xl text-lg text-(--color-text-dim)">{AUTHOR.tagline}</p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a
+      href="/papers"
+      class="rounded-full bg-(--color-accent) px-6 py-3 font-semibold text-(--color-bg) motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
+    >
+      Vào thư viện Papers
+    </a>
+    <a
+      href="/essays"
+      class="rounded-full border border-(--color-border) px-6 py-3 font-semibold text-(--color-text) motion-safe:transition-transform motion-safe:hover:-translate-y-0.5"
+    >
+      Đọc chiêm nghiệm
+    </a>
+  </div>
+</section>

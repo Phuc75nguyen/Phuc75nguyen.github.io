@@ -1,0 +1,29 @@
+---
+import Badge from '../ui/Badge.astro';
+import { getRecentAcrossCollections, type ContentType } from '../../lib/collections';
+
+const TYPE_LABEL: Record<ContentType, string> = {
+  papers: 'Paper',
+  notes: 'Note',
+  essays: 'Essay',
+  poems: 'Thơ',
+};
+
+const recent = await getRecentAcrossCollections(5);
+---
+
+{recent.length > 0 && (
+  <section class="py-10">
+    <h2 class="mb-6 text-2xl font-semibold text-(--color-text)">Gần đây</h2>
+    <ul class="flex flex-col divide-y divide-(--color-border)">
+      {recent.map((item) => (
+        <li data-reveal class="flex items-center gap-3 py-3">
+          <Badge tone="muted">{TYPE_LABEL[item.type]}</Badge>
+          <a href={item.href} class="text-(--color-text) hover:text-(--color-accent)">
+            {item.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

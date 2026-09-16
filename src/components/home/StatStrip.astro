@@ -1,0 +1,20 @@
+---
+import { getSiteStats } from '../../lib/collections';
+
+const stats = await getSiteStats();
+const items = [
+  { label: 'papers phân tích', value: stats.papers },
+  { label: 'notes', value: stats.notes },
+  { label: 'essays', value: stats.essays },
+  { label: 'bài thơ', value: stats.poems },
+];
+---
+
+<div data-reveal class="mx-auto grid max-w-2xl grid-cols-2 gap-6 py-10 sm:grid-cols-4">
+  {items.map((item) => (
+    <div class="text-center">
+      <p class="text-3xl font-semibold text-(--color-accent)">{item.value}</p>
+      <p class="text-sm text-(--color-text-dim)">{item.label}</p>
+    </div>
+  ))}
+</div>

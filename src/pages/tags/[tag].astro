@@ -41,30 +41,24 @@ interface TaggedItem {
 }
 
 const items: TaggedItem[] = [
-  ...papers.map(
-    (entry): TaggedItem => ({
-      title: entry.data.title,
-      href: `/papers/${entry.id}`,
-      description: entry.data.tldr,
-      date: entry.data.publishDate,
-    }),
-  ),
-  ...notes.map(
-    (entry): TaggedItem => ({
-      title: entry.data.title,
-      href: `/notes/${entry.id}`,
-      description: entry.data.description,
-      date: entry.data.publishDate,
-    }),
-  ),
-  ...essays.map(
-    (entry): TaggedItem => ({
-      title: entry.data.title,
-      href: `/essays/${entry.id}`,
-      description: entry.data.subtitle ?? '',
-      date: entry.data.publishDate,
-    }),
-  ),
+  ...papers.map((entry): TaggedItem => ({
+    title: entry.data.title,
+    href: `/papers/${entry.id}`,
+    description: entry.data.tldr,
+    date: entry.data.publishDate,
+  })),
+  ...notes.map((entry): TaggedItem => ({
+    title: entry.data.title,
+    href: `/notes/${entry.id}`,
+    description: entry.data.description,
+    date: entry.data.publishDate,
+  })),
+  ...essays.map((entry): TaggedItem => ({
+    title: entry.data.title,
+    href: `/essays/${entry.id}`,
+    description: entry.data.subtitle ?? '',
+    date: entry.data.publishDate,
+  })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 ---
 
@@ -75,13 +69,11 @@ const items: TaggedItem[] = [
     <p class="mt-2 text-(--color-text-dim)">{items.length} bài viết.</p>
   </header>
   <div class="flex flex-col gap-4">
-    {
-      items.map((item) => (
-        <Card href={item.href}>
-          <h2 class="font-semibold text-(--color-text)">{item.title}</h2>
-          {item.description && <p class="mt-1 text-sm text-(--color-text-dim)">{item.description}</p>}
-        </Card>
-      ))
-    }
+    {items.map((item) => (
+      <Card href={item.href}>
+        <h2 class="font-semibold text-(--color-text)">{item.title}</h2>
+        {item.description && <p class="mt-1 text-sm text-(--color-text-dim)">{item.description}</p>}
+      </Card>
+    ))}
   </div>
 </BaseLayout>

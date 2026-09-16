@@ -30,7 +30,13 @@ const jsonLd = buildBlogPosting({
 });
 ---
 
-<BaseLayout title={note.title} description={note.description} room="lab" ogImage={ogImage} jsonLd={jsonLd}>
+<BaseLayout
+  title={note.title}
+  description={note.description}
+  room="lab"
+  ogImage={ogImage}
+  jsonLd={jsonLd}
+>
   <ReadingProgress />
   <article class="mx-auto max-w-3xl">
     <span data-pagefind-filter="type:Note" class="hidden"></span>
@@ -51,14 +57,12 @@ const jsonLd = buildBlogPosting({
 
     {note.series && <SeriesNav collection="notes" series={note.series} currentId={id} />}
 
-    {
-      note.tags.length > 0 && (
-        <div class="mt-10 flex flex-wrap gap-2 border-t border-(--color-border) pt-6">
-          {note.tags.map((tag) => (
-            <Tag tag={tag} />
-          ))}
-        </div>
-      )
-    }
+    {note.tags.length > 0 && (
+      <div class="mt-10 flex flex-wrap gap-2 border-t border-(--color-border) pt-6">
+        {note.tags.map((tag) => (
+          <Tag tag={tag} />
+        ))}
+      </div>
+    )}
   </article>
 </BaseLayout>

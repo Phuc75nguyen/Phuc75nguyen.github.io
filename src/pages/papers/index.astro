@@ -24,7 +24,11 @@ const STATUS_LABEL: Record<(typeof papers)[number]['data']['status'], string> = 
 };
 ---
 
-<BaseLayout title="Papers" description="Thư viện phân tích paper AI/ML, kèm phản biện và đánh giá khả năng ứng dụng." room="lab">
+<BaseLayout
+  title="Papers"
+  description="Thư viện phân tích paper AI/ML, kèm phản biện và đánh giá khả năng ứng dụng."
+  room="lab"
+>
   <header class="mb-8 flex flex-col gap-2">
     <h1 class="text-4xl font-semibold text-(--color-text)">Thư viện Papers</h1>
     <p class="max-w-(--breakpoint-md) text-(--color-text-dim)">
@@ -34,15 +38,27 @@ const STATUS_LABEL: Record<(typeof papers)[number]['data']['status'], string> = 
   </header>
 
   <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-    <div id="domain-filters" class="flex flex-wrap gap-2" role="group" aria-label="Lọc theo lĩnh vực">
-      <Chip value="all" active={true} class="js-filter-chip">Tất cả</Chip>
+    <div
+      id="domain-filters"
+      class="flex flex-wrap gap-2"
+      role="group"
+      aria-label="Lọc theo lĩnh vực"
+    >
+      <Chip value="all" active={true} class="js-filter-chip">
+        Tất cả
+      </Chip>
       {DOMAINS.map((domain) => (
-        <Chip value={domain} class="js-filter-chip">{domain}</Chip>
+        <Chip value={domain} class="js-filter-chip">
+          {domain}
+        </Chip>
       ))}
     </div>
 
     <div class="flex items-center gap-3">
-      <label for="sort-select" class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+      <label
+        for="sort-select"
+        class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)"
+      >
         Sắp xếp
       </label>
       <select
@@ -55,7 +71,11 @@ const STATUS_LABEL: Record<(typeof papers)[number]['data']['status'], string> = 
         <option value="impact">Mức ảnh hưởng</option>
       </select>
 
-      <div class="flex rounded-md border border-(--color-border)" role="group" aria-label="Chế độ xem">
+      <div
+        class="flex rounded-md border border-(--color-border)"
+        role="group"
+        aria-label="Chế độ xem"
+      >
         <button
           type="button"
           id="view-card-btn"
@@ -82,84 +102,92 @@ const STATUS_LABEL: Record<(typeof papers)[number]['data']['status'], string> = 
     </p>
   </noscript>
 
-  {
-    papers.length === 0 ? (
-      <p class="text-(--color-text-dim)">Chưa có bài phân tích nào.</p>
-    ) : (
-      <Fragment>
-        <div id="card-view" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {papers.map((entry) => (
-            <div
-              class="js-paper-item"
-              data-domain={entry.data.domain}
-              data-year={entry.data.year}
-              data-difficulty={entry.data.difficulty}
-              data-impact={entry.data.impact}
-              data-date={entry.data.publishDate.getTime()}
-            >
-              <Card href={`/papers/${entry.id}`} class="flex h-full flex-col gap-3">
-                <p class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
-                  {entry.data.paperTitle} · {entry.data.venue ? `${entry.data.venue} ` : ''}
-                  {entry.data.year}
-                </p>
-                <h2 class="text-lg font-semibold text-(--color-text)">{entry.data.title}</h2>
-                <p class="flex-1 text-sm text-(--color-text-dim)">{entry.data.tldr}</p>
-                <div class="flex flex-wrap items-center gap-2">
-                  <Badge tone="accent">{entry.data.domain}</Badge>
-                  <Badge tone="muted">{STATUS_LABEL[entry.data.status]}</Badge>
-                </div>
-                <DotRating label="Độ khó" value={entry.data.difficulty} />
-              </Card>
-            </div>
-          ))}
-        </div>
+  {papers.length === 0 ? (
+    <p class="text-(--color-text-dim)">Chưa có bài phân tích nào.</p>
+  ) : (
+    <Fragment>
+      <div id="card-view" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {papers.map((entry) => (
+          <div
+            class="js-paper-item"
+            data-reveal
+            data-domain={entry.data.domain}
+            data-year={entry.data.year}
+            data-difficulty={entry.data.difficulty}
+            data-impact={entry.data.impact}
+            data-date={entry.data.publishDate.getTime()}
+          >
+            <Card href={`/papers/${entry.id}`} class="flex h-full flex-col gap-3">
+              <p class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+                {entry.data.paperTitle} · {entry.data.venue ? `${entry.data.venue} ` : ''}
+                {entry.data.year}
+              </p>
+              <h2 class="text-lg font-semibold text-(--color-text)">{entry.data.title}</h2>
+              <p class="flex-1 text-sm text-(--color-text-dim)">{entry.data.tldr}</p>
+              <div class="flex flex-wrap items-center gap-2">
+                <Badge tone="accent">{entry.data.domain}</Badge>
+                <Badge tone="muted">{STATUS_LABEL[entry.data.status]}</Badge>
+              </div>
+              <DotRating label="Độ khó" value={entry.data.difficulty} />
+            </Card>
+          </div>
+        ))}
+      </div>
 
-        <div id="table-view" class="hidden overflow-x-auto">
-          <table class="w-full border-collapse text-sm">
-            <thead>
-              <tr class="border-b border-(--color-border) text-left font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
-                <th class="py-2 pr-4">Paper</th>
-                <th class="py-2 pr-4">Domain</th>
-                <th class="py-2 pr-4">Year</th>
-                <th class="py-2 pr-4">Difficulty</th>
-                <th class="py-2 pr-4">Impact</th>
-                <th class="py-2 pr-4">Status</th>
+      <div id="table-view" class="hidden overflow-x-auto">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-(--color-border) text-left font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+              <th class="py-2 pr-4">Paper</th>
+              <th class="py-2 pr-4">Domain</th>
+              <th class="py-2 pr-4">Year</th>
+              <th class="py-2 pr-4">Difficulty</th>
+              <th class="py-2 pr-4">Impact</th>
+              <th class="py-2 pr-4">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {papers.map((entry) => (
+              <tr
+                class="js-paper-item border-b border-(--color-border)"
+                data-domain={entry.data.domain}
+                data-year={entry.data.year}
+                data-difficulty={entry.data.difficulty}
+                data-impact={entry.data.impact}
+                data-date={entry.data.publishDate.getTime()}
+              >
+                <td class="py-2 pr-4">
+                  <a
+                    href={`/papers/${entry.id}`}
+                    class="text-(--color-text) hover:text-(--color-accent)"
+                  >
+                    {entry.data.title}
+                  </a>
+                </td>
+                <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.domain}</td>
+                <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.year}</td>
+                <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.difficulty}/5</td>
+                <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.impact}/5</td>
+                <td class="py-2 pr-4 text-(--color-text-dim)">{STATUS_LABEL[entry.data.status]}</td>
               </tr>
-            </thead>
-            <tbody>
-              {papers.map((entry) => (
-                <tr
-                  class="js-paper-item border-b border-(--color-border)"
-                  data-domain={entry.data.domain}
-                  data-year={entry.data.year}
-                  data-difficulty={entry.data.difficulty}
-                  data-impact={entry.data.impact}
-                  data-date={entry.data.publishDate.getTime()}
-                >
-                  <td class="py-2 pr-4">
-                    <a href={`/papers/${entry.id}`} class="text-(--color-text) hover:text-(--color-accent)">
-                      {entry.data.title}
-                    </a>
-                  </td>
-                  <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.domain}</td>
-                  <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.year}</td>
-                  <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.difficulty}/5</td>
-                  <td class="py-2 pr-4 text-(--color-text-dim)">{entry.data.impact}/5</td>
-                  <td class="py-2 pr-4 text-(--color-text-dim)">{STATUS_LABEL[entry.data.status]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Fragment>
-    )
-  }
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Fragment>
+  )}
 
-  <p id="empty-state" class="hidden text-(--color-text-dim)">Không có paper nào khớp bộ lọc.</p>
+  <p id="empty-state" class="hidden text-(--color-text-dim)">
+    Không có paper nào khớp bộ lọc.
+  </p>
 </BaseLayout>
 
 <script>
-  const CHIP_ACTIVE = ['border-(--color-accent)', 'bg-(--color-accent)/15', 'text-(--color-accent)'];
+  const CHIP_ACTIVE = [
+    'border-(--color-accent)',
+    'bg-(--color-accent)/15',
+    'text-(--color-accent)',
+  ];
   const CHIP_INACTIVE = ['border-(--color-border)', 'text-(--color-text-dim)'];
 
   const params = new URLSearchParams(window.location.search);

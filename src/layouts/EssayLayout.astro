@@ -49,14 +49,12 @@ const jsonLd = buildBlogPosting({
       <slot />
     </div>
 
-    {
-      essay.tags.length > 0 && (
-        <div class="mt-10 flex flex-wrap gap-2 border-t border-(--color-border) pt-6">
-          {essay.tags.map((tag) => (
-            <Tag tag={tag} />
-          ))}
-        </div>
-      )
-    }
+    {essay.tags.length > 0 && (
+      <div class="mt-10 flex flex-wrap gap-2 border-t border-(--color-border) pt-6">
+        {essay.tags.map((tag) => (
+          <Tag tag={tag} />
+        ))}
+      </div>
+    )}
   </article>
 </BaseLayout>

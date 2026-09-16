@@ -1,0 +1,5 @@
+# Shell scripts must keep LF endings regardless of the checkout platform's
+# core.autocrlf setting - a CRLF pre-commit hook can fail to run on some
+# shells ("bad interpreter"/stray \r errors).
+.husky/* text eol=lf
+scripts/*.mjs text eol=lf

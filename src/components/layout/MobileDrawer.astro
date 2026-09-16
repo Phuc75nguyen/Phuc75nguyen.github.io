@@ -5,10 +5,10 @@ import { AUTHOR } from '../../site.config';
 ---
 
 <div class="lg:hidden">
-  <header
-    class="sticky top-0 z-30 flex items-center justify-between border-b border-(--color-border) bg-(--color-bg) px-4 py-3"
-  >
-    <a href="/" class="font-mono text-sm uppercase tracking-wide text-(--color-text)">{AUTHOR.name}</a>
+  <header class="sticky top-0 z-30 flex items-center justify-between border-b border-(--color-border) bg-(--color-bg) px-4 py-3">
+    <a href="/" class="font-mono text-sm uppercase tracking-wide text-(--color-text)">
+      {AUTHOR.name}
+    </a>
     <button
       type="button"
       id="drawer-open"
@@ -21,7 +21,13 @@ import { AUTHOR } from '../../site.config';
     </button>
   </header>
 
-  <div id="mobile-drawer" class="fixed inset-0 z-40 hidden" role="dialog" aria-modal="true" aria-label="Menu điều hướng">
+  <div
+    id="mobile-drawer"
+    class="fixed inset-0 z-40 hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menu điều hướng"
+  >
     <div id="drawer-overlay" class="absolute inset-0 bg-black/60"></div>
     <div
       id="drawer-panel"

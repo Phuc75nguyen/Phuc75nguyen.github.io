@@ -1,0 +1,32 @@
+---
+import Card from '../ui/Card.astro';
+import Badge from '../ui/Badge.astro';
+import DotRating from '../ui/DotRating.astro';
+import { getPublished } from '../../lib/collections';
+
+const papers = (await getPublished('papers')).filter((entry) => entry.data.featured).slice(0, 3);
+---
+
+{papers.length > 0 && (
+  <section class="py-10">
+    <h2 class="mb-6 text-2xl font-semibold text-(--color-text)">Featured Papers</h2>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {papers.map((entry) => (
+        <div data-reveal>
+          <Card href={`/papers/${entry.id}`} class="flex h-full flex-col gap-3">
+            <p class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+              {entry.data.venue ? `${entry.data.venue} ` : ''}
+              {entry.data.year}
+            </p>
+            <h3 class="text-lg font-semibold text-(--color-text)">{entry.data.title}</h3>
+            <p class="flex-1 text-sm text-(--color-text-dim)">{entry.data.tldr}</p>
+            <div class="flex flex-wrap items-center gap-2">
+              <Badge tone="accent">{entry.data.domain}</Badge>
+            </div>
+            <DotRating label="Độ khó" value={entry.data.difficulty} />
+          </Card>
+        </div>
+      ))}
+    </div>
+  </section>
+)}

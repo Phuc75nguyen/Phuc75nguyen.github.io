@@ -20,38 +20,30 @@ export async function getStaticPaths() {
   ]);
 
   const entries: OgPathEntry[] = [
-    ...papers.map(
-      (entry): OgPathEntry => ({
-        path: `papers/${entry.id}`,
-        title: entry.data.title,
-        label: entry.data.domain,
-        accent: LAB_ACCENT,
-      }),
-    ),
-    ...notes.map(
-      (entry): OgPathEntry => ({
-        path: `notes/${entry.id}`,
-        title: entry.data.title,
-        label: entry.data.category,
-        accent: LAB_ACCENT,
-      }),
-    ),
-    ...essays.map(
-      (entry): OgPathEntry => ({
-        path: `essays/${entry.id}`,
-        title: entry.data.title,
-        label: entry.data.theme,
-        accent: HIEN_ACCENT,
-      }),
-    ),
-    ...poems.map(
-      (entry): OgPathEntry => ({
-        path: `poems/${entry.id}`,
-        title: entry.data.title,
-        label: entry.data.form,
-        accent: HIEN_ACCENT,
-      }),
-    ),
+    ...papers.map((entry): OgPathEntry => ({
+      path: `papers/${entry.id}`,
+      title: entry.data.title,
+      label: entry.data.domain,
+      accent: LAB_ACCENT,
+    })),
+    ...notes.map((entry): OgPathEntry => ({
+      path: `notes/${entry.id}`,
+      title: entry.data.title,
+      label: entry.data.category,
+      accent: LAB_ACCENT,
+    })),
+    ...essays.map((entry): OgPathEntry => ({
+      path: `essays/${entry.id}`,
+      title: entry.data.title,
+      label: entry.data.theme,
+      accent: HIEN_ACCENT,
+    })),
+    ...poems.map((entry): OgPathEntry => ({
+      path: `poems/${entry.id}`,
+      title: entry.data.title,
+      label: entry.data.form,
+      accent: HIEN_ACCENT,
+    })),
   ];
 
   return entries.map((entry) => ({

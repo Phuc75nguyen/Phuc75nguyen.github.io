@@ -74,8 +74,10 @@
 }
 
 .prose table {
+  display: block;
   width: 100%;
   margin: 1.5em 0;
+  overflow-x: auto;
   border-collapse: collapse;
   font-size: var(--text-sm);
 }
@@ -112,4 +114,12 @@
 
 .prose > :first-child {
   margin-top: 0;
+}
+
+/* A long formula (e.g. the complexity-comparison row in a paper) can be
+   wider than a phone screen. Scroll the formula itself, not the page -
+   this is the actual overflow BLUEPRINT's 375px check is meant to catch. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
 }

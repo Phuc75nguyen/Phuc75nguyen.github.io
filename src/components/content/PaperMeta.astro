@@ -31,21 +31,19 @@ const links = [
     {authors.join(', ')}
     {venue ? ` · ${venue} ${year}` : ` · ${year}`}
   </p>
-  {
-    links.length > 0 && (
-      <div class="flex flex-wrap gap-2">
-        {links.map((link) => (
-          <a
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 rounded-full border border-(--color-border) px-3 py-1.5 text-sm text-(--color-text-dim) hover:border-(--color-accent)/40 hover:text-(--color-accent)"
-          >
-            <Icon name={link.icon} class="size-4" aria-hidden="true" />
-            {link.label}
-          </a>
-        ))}
-      </div>
-    )
-  }
+  {links.length > 0 && (
+    <div class="flex flex-wrap gap-2">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-full border border-(--color-border) px-3 py-1.5 text-sm text-(--color-text-dim) hover:border-(--color-accent)/40 hover:text-(--color-accent)"
+        >
+          <Icon name={link.icon} class="size-4" aria-hidden="true" />
+          {link.label}
+        </a>
+      ))}
+    </div>
+  )}
 </div>

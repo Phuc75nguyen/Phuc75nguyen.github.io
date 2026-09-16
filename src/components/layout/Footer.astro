@@ -6,13 +6,11 @@ const year = new Date().getFullYear();
 
 <footer class="flex flex-col gap-3 border-t border-(--color-border) px-4 py-6 text-xs text-(--color-text-dim) sm:px-6 lg:px-0">
   <nav aria-label="Điều hướng phụ" class="flex flex-wrap gap-x-4 gap-y-1">
-    {
-      SECONDARY_NAV_ITEMS.map((item) => (
-        <a href={item.href} class="hover:text-(--color-text)">
-          {item.label}
-        </a>
-      ))
-    }
+    {SECONDARY_NAV_ITEMS.map((item) => (
+      <a href={item.href} class="hover:text-(--color-text)">
+        {item.label}
+      </a>
+    ))}
   </nav>
   <p>
     © {year} {AUTHOR.name} ·

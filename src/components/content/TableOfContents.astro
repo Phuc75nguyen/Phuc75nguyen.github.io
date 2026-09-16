@@ -15,27 +15,25 @@ const { headings } = Astro.props;
 const items = headings.filter((h) => h.depth === 2);
 ---
 
-{
-  items.length > 0 && (
-    <nav aria-label="Mục lục" class="text-sm">
-      <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Mục lục</p>
-      <ul class="flex flex-col gap-1 border-l border-(--color-border)">
-        {items.map((h) => (
-          <li>
-            <a
-              href={`#${h.slug}`}
-              data-toc-link
-              data-slug={h.slug}
-              class="-ml-px block border-l-2 border-transparent py-1 pl-3 text-(--color-text-dim) hover:text-(--color-text)"
-            >
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  )
-}
+{items.length > 0 && (
+  <nav aria-label="Mục lục" class="text-sm">
+    <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Mục lục</p>
+    <ul class="flex flex-col gap-1 border-l border-(--color-border)">
+      {items.map((h) => (
+        <li>
+          <a
+            href={`#${h.slug}`}
+            data-toc-link
+            data-slug={h.slug}
+            class="-ml-px block border-l-2 border-transparent py-1 pl-3 text-(--color-text-dim) hover:text-(--color-text)"
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
 
 <script>
   const ACTIVE_LINK_CLASSES = ['border-l-(--color-accent)', 'text-(--color-accent)'];

@@ -2,7 +2,12 @@
 import { Icon } from 'astro-icon/components';
 import Tag from '../ui/Tag.astro';
 import { AUTHOR, SOCIAL_LINKS, NAV_ITEMS, REPO_URL } from '../../site.config';
-import { getSiteStats, getRecentAcrossCollections, getPublished, getTopTags } from '../../lib/collections';
+import {
+  getSiteStats,
+  getRecentAcrossCollections,
+  getPublished,
+  getTopTags,
+} from '../../lib/collections';
 
 interface Props {
   class?: string;
@@ -51,14 +56,15 @@ const topTags = getTopTags([...papersForTags, ...notesForTags, ...essaysForTags]
 
   <!-- 2. Thông tin liên hệ (native <details> — hoạt động không cần JS) -->
   <details class="rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) px-4 py-3">
-    <summary
-      class="flex cursor-pointer list-none items-center justify-between font-mono text-xs uppercase tracking-wide text-(--color-text)"
-    >
+    <summary class="flex cursor-pointer list-none items-center justify-between font-mono text-xs uppercase tracking-wide text-(--color-text)">
       Thông tin liên hệ
       <Icon name="lucide:chevron-down" class="size-4" aria-hidden="true" />
     </summary>
     <div class="mt-3 flex flex-col gap-2 text-sm text-(--color-text-dim)">
-      <a href={`mailto:${AUTHOR.email}`} class="flex items-center gap-2 hover:text-(--color-accent)">
+      <a
+        href={`mailto:${AUTHOR.email}`}
+        class="flex items-center gap-2 hover:text-(--color-accent)"
+      >
         <Icon name="lucide:mail" class="size-4 shrink-0" aria-hidden="true" />
         {AUTHOR.email}
       </a>
@@ -66,50 +72,44 @@ const topTags = getTopTags([...papersForTags, ...notesForTags, ...essaysForTags]
         <Icon name="lucide:map-pin" class="size-4 shrink-0" aria-hidden="true" />
         {AUTHOR.location}
       </p>
-      {
-        SOCIAL_LINKS.map((link) => (
-          <a
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-2 hover:text-(--color-accent)"
-          >
-            <Icon name={link.icon} class="size-4 shrink-0" aria-hidden="true" />
-            {link.label}
-          </a>
-        ))
-      }
+      {SOCIAL_LINKS.map((link) => (
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center gap-2 hover:text-(--color-accent)"
+        >
+          <Icon name={link.icon} class="size-4 shrink-0" aria-hidden="true" />
+          {link.label}
+        </a>
+      ))}
     </div>
   </details>
 
   <!-- 3. Điều hướng chính -->
   <nav aria-label="Điều hướng chính">
     <ul class="flex flex-col gap-1">
-      {
-        NAV_ITEMS.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              aria-current={isActive(item.href) ? 'page' : undefined}
-              class:list={[
-                'block rounded-md border-l-2 px-3 py-2 text-sm',
-                isActive(item.href)
-                  ? 'border-(--color-accent) bg-(--color-surface) text-(--color-text)'
-                  : 'border-transparent text-(--color-text-dim) hover:text-(--color-text)',
-              ]}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
+      {NAV_ITEMS.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'block rounded-md border-l-2 px-3 py-2 text-sm',
+              isActive(item.href)
+                ? 'border-(--color-accent) bg-(--color-surface) text-(--color-text)'
+                : 'border-transparent text-(--color-text-dim) hover:text-(--color-text)',
+            ]}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
     </ul>
   </nav>
 
   <!-- 4. Chỉ số động -->
-  <div
-    class="rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) px-4 py-3 font-mono text-xs text-(--color-text-dim)"
-  >
+  <div class="rounded-(--radius-card) border border-(--color-border) bg-(--color-surface) px-4 py-3 font-mono text-xs text-(--color-text-dim)">
     <p>{stats.papers} papers phân tích</p>
     <p>{stats.notes} notes</p>
     <p>{stats.essays} essays</p>
@@ -118,40 +118,40 @@ const topTags = getTopTags([...papersForTags, ...notesForTags, ...essaysForTags]
 
   <!-- 5. Bài mới nhất -->
   <div>
-    <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Bài mới nhất</p>
-    {
-      latestPosts.length === 0 ? (
-        <p class="text-sm text-(--color-text-dim)">Chưa có bài viết nào.</p>
-      ) : (
-        <ul class="flex flex-col gap-2">
-          {latestPosts.map((post) => (
-            <li>
-              <a href={post.href} class="text-sm text-(--color-text-dim) hover:text-(--color-text)">
-                {post.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+      Bài mới nhất
+    </p>
+    {latestPosts.length === 0 ? (
+      <p class="text-sm text-(--color-text-dim)">Chưa có bài viết nào.</p>
+    ) : (
+      <ul class="flex flex-col gap-2">
+        {latestPosts.map((post) => (
+          <li>
+            <a href={post.href} class="text-sm text-(--color-text-dim) hover:text-(--color-text)">
+              {post.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 
   <!-- 6. Tag nổi bật -->
   <div>
-    <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Tag nổi bật</p>
-    {
-      topTags.length === 0 ? (
-        <p class="text-sm text-(--color-text-dim)">Chưa có tag nào.</p>
-      ) : (
-        <ul class="flex flex-wrap gap-2">
-          {topTags.map((tag) => (
-            <li>
-              <Tag tag={tag} />
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+      Tag nổi bật
+    </p>
+    {topTags.length === 0 ? (
+      <p class="text-sm text-(--color-text-dim)">Chưa có tag nào.</p>
+    ) : (
+      <ul class="flex flex-wrap gap-2">
+        {topTags.map((tag) => (
+          <li>
+            <Tag tag={tag} />
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 
   <!-- 7. Footer sidebar -->
@@ -162,9 +162,14 @@ const topTags = getTopTags([...papersForTags, ...notesForTags, ...essaysForTags]
       class="rounded-md border border-(--color-border) p-2 text-(--color-text-dim) hover:text-(--color-text)"
       aria-label="Chuyển giao diện sáng/tối"
     >
-      <Icon name="lucide:moon" class="size-4" aria-hidden="true" />
+      <Icon name="lucide:moon" class="theme-icon-dark size-4" aria-hidden="true" />
+      <Icon name="lucide:sun" class="theme-icon-light size-4" aria-hidden="true" />
     </button>
-    <a href="/rss.xml" class="rounded-md border border-(--color-border) p-2 text-(--color-text-dim) hover:text-(--color-text)" aria-label="RSS">
+    <a
+      href="/rss.xml"
+      class="rounded-md border border-(--color-border) p-2 text-(--color-text-dim) hover:text-(--color-text)"
+      aria-label="RSS"
+    >
       <Icon name="lucide:rss" class="size-4" aria-hidden="true" />
     </a>
     <a

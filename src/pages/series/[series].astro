@@ -52,18 +52,16 @@ const entries = [
     <p class="mt-2 text-(--color-text-dim)">{entries.length} bài trong chuỗi này.</p>
   </header>
   <ol class="flex flex-col gap-4">
-    {
-      entries.map((entry, i) => (
-        <li>
-          <Card href={entry.href} class="flex items-baseline gap-3">
-            <span class="font-mono text-sm text-(--color-text-dim)">{i + 1}.</span>
-            <div>
-              <h2 class="font-semibold text-(--color-text)">{entry.title}</h2>
-              <p class="text-sm text-(--color-text-dim)">{entry.description}</p>
-            </div>
-          </Card>
-        </li>
-      ))
-    }
+    {entries.map((entry, i) => (
+      <li>
+        <Card href={entry.href} class="flex items-baseline gap-3">
+          <span class="font-mono text-sm text-(--color-text-dim)">{i + 1}.</span>
+          <div>
+            <h2 class="font-semibold text-(--color-text)">{entry.title}</h2>
+            <p class="text-sm text-(--color-text-dim)">{entry.description}</p>
+          </div>
+        </Card>
+      </li>
+    ))}
   </ol>
 </BaseLayout>

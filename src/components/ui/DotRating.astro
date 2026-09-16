@@ -17,15 +17,13 @@ const dots = Array.from({ length: max }, (_, i) => i < value);
 >
   <span class="font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">{label}</span>
   <span aria-hidden="true" class="flex gap-0.5">
-    {
-      dots.map((filled) => (
-        <span
-          class:list={[
-            'size-1.5 rounded-full',
-            filled ? 'bg-(--color-accent)' : 'bg-(--color-border)',
-          ]}
-        />
-      ))
-    }
+    {dots.map((filled) => (
+      <span
+        class:list={[
+          'size-1.5 rounded-full',
+          filled ? 'bg-(--color-accent)' : 'bg-(--color-border)',
+        ]}
+      />
+    ))}
   </span>
 </span>

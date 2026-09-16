@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { AUTHOR, SOCIAL_LINKS } from '../site.config';
+import { getEntry } from 'astro:content';
+import { buildPerson } from '../lib/json-ld';
+import { Icon } from 'astro-icon/components';
+
+// 3 bai tam dac nhat (BLUEPRINT Muc 6.5) - day la lua chon ca nhan, chi
+// Phuc moi biet chinh xac muon dan toi bai nao. Da chon tam 2 paper + 1
+// note lam vi du hop ly (dai dien ca 2 mang: phan tich paper sau va kinh
+// nghiem production that), nhung PHUC DIEN de xac nhan/doi lai ben duoi.
+const FAVORITE_PAPER_SLUGS = [
+  'attention-is-all-you-need',
+  'hidden-technical-debt-in-machine-learning-systems',
+];
+const FAVORITE_NOTE_SLUGS = ['thiet-ke-feature-store-tren-databricks'];
+
+interface Favorite {
+  title: string;
+  href: string;
+  description: string;
+}
+
+const favoritePapers = (
+  await Promise.all(FAVORITE_PAPER_SLUGS.map((slug) => getEntry('papers', slug)))
+)
+  .filter((entry) => entry !== undefined)
+  .map((entry): Favorite => ({
+    title: entry.data.title,
+    href: `/papers/${entry.id}`,
+    description: entry.data.tldr,
+  }));
+
+const favoriteNotes = (
+  await Promise.all(FAVORITE_NOTE_SLUGS.map((slug) => getEntry('notes', slug)))
+)
+  .filter((entry) => entry !== undefined)
+  .map((entry): Favorite => ({
+    title: entry.data.title,
+    href: `/notes/${entry.id}`,
+    description: entry.data.description,
+  }));
+
+const favorites: Favorite[] = [...favoritePapers, ...favoriteNotes];
+
+const jsonLd = buildPerson();
+---
+
+<BaseLayout
+  title="Về tôi"
+  description={`${AUTHOR.name} — ${AUTHOR.role}.`}
+  room="lab"
+  jsonLd={jsonLd}
+>
+  <article class="mx-auto flex max-w-2xl flex-col gap-12">
+    <!-- No data-reveal - header is the initial-viewport LCP content here too (see Hero.astro). -->
+    <header class="flex flex-col items-center gap-3 text-center">
+      <img
+        src={AUTHOR.avatar}
+        alt={`Ảnh đại diện của ${AUTHOR.name}`}
+        width="120"
+        height="120"
+        class="rounded-full border border-(--color-border)"
+      />
+      <h1 class="text-4xl font-semibold text-(--color-text)">{AUTHOR.name}</h1>
+      <p class="text-(--color-text-dim)">
+        {AUTHOR.role} · {AUTHOR.location}
+      </p>
+      <div class="flex gap-3">
+        {SOCIAL_LINKS.map((link) => (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-md border border-(--color-border) p-2 text-(--color-text-dim) hover:text-(--color-accent)"
+            aria-label={link.label}
+          >
+            <Icon name={link.icon} class="size-4" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </header>
+
+    <section data-reveal>
+      <h2 class="mb-3 text-xl font-semibold text-(--color-text)">Tiểu sử</h2>
+      <div class="prose">
+        <p>
+          Tôi làm Data Scientist / MLOps Engineer, hiện phụ trách xây dựng và vận hành feature store
+          trên Databricks phục vụ các mô hình rủi ro tín dụng và phát hiện gian lận trong ngân hàng.
+          Công việc hằng ngày xoay quanh việc đưa mô hình machine learning từ notebook ra production
+          một cách bền vững — pipeline dữ liệu đúng, feature không rò rỉ tương lai, hệ thống giám
+          sát được khi có sự cố.
+        </p>
+        <p>
+          <!-- PHÚC ĐIỀN: 2-3 câu giới thiệu bản thân theo cách của anh — xuất thân, điều gì khiến anh
+          chọn hướng đi này, hoặc bất kỳ chi tiết cá nhân nào muốn nhà tuyển dụng biết ngay từ đầu. -->
+        </p>
+      </div>
+    </section>
+
+    <section data-reveal>
+      <h2 class="mb-3 text-xl font-semibold text-(--color-text)">Hành trình</h2>
+      <div class="prose">
+        <p>
+          Tôi bắt đầu từ phía nghiên cứu và ứng dụng AI/ML — làm việc với các bài toán về retrieval,
+          chatbot dựa trên RAG, và các mô hình học sâu trong quá trình học tập.
+          <!-- PHÚC ĐIỀN: tên trường, ngành học, năm tốt nghiệp, đề tài đồ án/khóa luận tốt nghiệp
+          cụ thể (vd: RAG-based chatbot, NutriAI...) nếu muốn nêu ra đây. -->
+        </p>
+        <p>
+          Từ đó tôi chuyển dần sang MLOps — nhận ra khoảng cách lớn nhất trong ML không nằm ở việc
+          huấn luyện mô hình, mà ở việc giữ cho một hệ thống ML chạy đúng, chạy ổn định, và có thể
+          bảo trì được sau nhiều tháng vận hành thật.
+          <!-- PHÚC ĐIỀN: tên công ty/ngân hàng, thời điểm bắt đầu, vai trò cụ thể, quy mô hệ thống
+          (bao nhiêu feature, bao nhiêu mô hình, tần suất phục vụ...) nếu muốn công khai. -->
+        </p>
+      </div>
+    </section>
+
+    <section data-reveal>
+      <h2 class="mb-3 text-xl font-semibold text-(--color-text)">Mảng quan tâm</h2>
+      <ul class="prose list-disc pl-5">
+        <li>MLOps, feature store, hạ tầng dữ liệu cho ML production trên Databricks/Spark</li>
+        <li>
+          LLM &amp; VLM, Agentic AI — đặc biệt là khả năng ứng dụng thực tế trong môi trường có quy
+          định chặt (ngân hàng, tài chính)
+        </li>
+        <li>
+          Đọc và mổ xẻ paper AI/ML — xem thư viện <a href="/papers">Papers</a>
+        </li>
+        <li>
+          Thơ Việt Nam và những chiêm nghiệm ngoài công việc — xem <a href="/essays">Essays</a> và
+          <a href="/poems">Thơ</a>
+        </li>
+      </ul>
+    </section>
+
+    {favorites.length > 0 && (
+      <section data-reveal>
+        <h2 class="mb-3 text-xl font-semibold text-(--color-text)">3 bài tâm đắc nhất</h2>
+        <!-- PHÚC ĐIỀN: đây là lựa chọn tạm thời (2 paper + 1 note) — đổi lại trong FAVORITE_SLUGS
+          ở đầu file nếu anh có 3 bài khác đại diện hơn cho cách anh làm việc. -->
+        <ol class="flex flex-col gap-4">
+          {favorites.map((item, i) => (
+            <li class="flex gap-3">
+              <span class="font-mono text-sm text-(--color-text-dim)">{i + 1}.</span>
+              <div>
+                <a
+                  href={item.href}
+                  class="font-semibold text-(--color-text) hover:text-(--color-accent)"
+                >
+                  {item.title}
+                </a>
+                <p class="text-sm text-(--color-text-dim)">{item.description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+  </article>
+</BaseLayout>

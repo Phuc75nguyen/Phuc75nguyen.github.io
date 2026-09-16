@@ -20,42 +20,34 @@ export async function GET(context: APIContext) {
   ]);
 
   const items: FeedItem[] = [
-    ...papers.map(
-      (entry): FeedItem => ({
-        title: entry.data.title,
-        pubDate: entry.data.publishDate,
-        description: entry.data.tldr,
-        link: `/papers/${entry.id}`,
-        categories: ['Paper', entry.data.domain],
-      }),
-    ),
-    ...notes.map(
-      (entry): FeedItem => ({
-        title: entry.data.title,
-        pubDate: entry.data.publishDate,
-        description: entry.data.description,
-        link: `/notes/${entry.id}`,
-        categories: ['Note', entry.data.category],
-      }),
-    ),
-    ...essays.map(
-      (entry): FeedItem => ({
-        title: entry.data.title,
-        pubDate: entry.data.publishDate,
-        description: entry.data.subtitle ?? entry.data.title,
-        link: `/essays/${entry.id}`,
-        categories: ['Essay', entry.data.theme],
-      }),
-    ),
-    ...poems.map(
-      (entry): FeedItem => ({
-        title: entry.data.title,
-        pubDate: entry.data.publishDate,
-        description: entry.data.note ?? entry.data.title,
-        link: `/poems/${entry.id}`,
-        categories: ['Thơ', entry.data.form],
-      }),
-    ),
+    ...papers.map((entry): FeedItem => ({
+      title: entry.data.title,
+      pubDate: entry.data.publishDate,
+      description: entry.data.tldr,
+      link: `/papers/${entry.id}`,
+      categories: ['Paper', entry.data.domain],
+    })),
+    ...notes.map((entry): FeedItem => ({
+      title: entry.data.title,
+      pubDate: entry.data.publishDate,
+      description: entry.data.description,
+      link: `/notes/${entry.id}`,
+      categories: ['Note', entry.data.category],
+    })),
+    ...essays.map((entry): FeedItem => ({
+      title: entry.data.title,
+      pubDate: entry.data.publishDate,
+      description: entry.data.subtitle ?? entry.data.title,
+      link: `/essays/${entry.id}`,
+      categories: ['Essay', entry.data.theme],
+    })),
+    ...poems.map((entry): FeedItem => ({
+      title: entry.data.title,
+      pubDate: entry.data.publishDate,
+      description: entry.data.note ?? entry.data.title,
+      link: `/poems/${entry.id}`,
+      categories: ['Thơ', entry.data.form],
+    })),
   ].sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf());
 
   return rss({

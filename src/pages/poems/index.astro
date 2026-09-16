@@ -32,35 +32,36 @@ for (const entry of poems) {
     <h1 class="font-serif text-4xl text-(--color-text)">Thơ</h1>
   </header>
 
-  {
-    poems.length === 0 ? (
-      <p class="mx-auto max-w-3xl text-center text-(--color-text-dim)">Chưa có bài thơ nào.</p>
-    ) : (
-      <div class="mx-auto flex max-w-3xl flex-col gap-10">
-        {[...grouped.entries()].map(([collection, cards]) => (
-          <section>
-            {collection && <h2 class="mb-4 font-serif text-xl text-(--color-text-dim)">{collection}</h2>}
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {cards.map((card) => (
-                <a
-                  href={`/poems/${card.id}`}
-                  class="group flex flex-col gap-2 border-b border-(--color-border) pb-6"
-                >
-                  <span class="text-sm text-(--color-text-dim)">{card.form}</span>
-                  <span class="font-serif text-xl text-(--color-text) group-hover:text-(--color-accent)">
-                    {card.title}
-                  </span>
-                  {card.previewLines.length > 0 && (
-                    <p class="whitespace-pre-line font-serif text-(--color-text-dim)">
-                      {card.previewLines.join('\n')}
-                    </p>
-                  )}
-                </a>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
-    )
-  }
+  {poems.length === 0 ? (
+    <p class="mx-auto max-w-3xl text-center text-(--color-text-dim)">Chưa có bài thơ nào.</p>
+  ) : (
+    <div class="mx-auto flex max-w-3xl flex-col gap-10">
+      {[...grouped.entries()].map(([collection, cards]) => (
+        <section>
+          {collection && (
+            <h2 class="mb-4 font-serif text-xl text-(--color-text-dim)">{collection}</h2>
+          )}
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {cards.map((card) => (
+              <a
+                href={`/poems/${card.id}`}
+                data-reveal
+                class="group flex flex-col gap-2 border-b border-(--color-border) pb-6"
+              >
+                <span class="text-sm text-(--color-text-dim)">{card.form}</span>
+                <span class="font-serif text-xl text-(--color-text) group-hover:text-(--color-accent)">
+                  {card.title}
+                </span>
+                {card.previewLines.length > 0 && (
+                  <p class="whitespace-pre-line font-serif text-(--color-text-dim)">
+                    {card.previewLines.join('\n')}
+                  </p>
+                )}
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )}
 </BaseLayout>

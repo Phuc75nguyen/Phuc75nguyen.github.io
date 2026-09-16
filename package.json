@@ -8,7 +8,9 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "new": "node scripts/new.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.1",
@@ -30,8 +32,15 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@iconify-json/lucide": "^1.2.132",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "pagefind": "^1.5.2",
     "playwright": "^1.63.0",
+    "prettier": "^3.9.7",
+    "prettier-plugin-astro": "^1.0.0",
     "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{astro,ts,js,mjs,json,css,md,mdx}": "prettier --write"
   }
 }

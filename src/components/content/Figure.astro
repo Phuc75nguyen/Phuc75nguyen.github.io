@@ -12,17 +12,21 @@ const { src, alt, caption } = Astro.props;
 ---
 
 <figure class="my-6">
-  {
-    typeof src === 'string' ? (
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        class="w-full rounded-(--radius-card) border border-(--color-border)"
-      />
-    ) : (
-      <Image src={src} alt={alt} class="w-full rounded-(--radius-card) border border-(--color-border)" />
-    )
-  }
-  {caption && <figcaption class="mt-2 text-center text-sm text-(--color-text-dim)">{caption}</figcaption>}
+  {typeof src === 'string' ? (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      class="w-full rounded-(--radius-card) border border-(--color-border)"
+    />
+  ) : (
+    <Image
+      src={src}
+      alt={alt}
+      class="w-full rounded-(--radius-card) border border-(--color-border)"
+    />
+  )}
+  {caption && (
+    <figcaption class="mt-2 text-center text-sm text-(--color-text-dim)">{caption}</figcaption>
+  )}
 </figure>

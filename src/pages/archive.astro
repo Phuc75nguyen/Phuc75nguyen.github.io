@@ -15,8 +15,18 @@ const TYPE_PATH: Record<ContentType, string> = {
   poems: '/poems',
 };
 const MONTH_NAMES = [
-  'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
-  'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12',
+  'Tháng 1',
+  'Tháng 2',
+  'Tháng 3',
+  'Tháng 4',
+  'Tháng 5',
+  'Tháng 6',
+  'Tháng 7',
+  'Tháng 8',
+  'Tháng 9',
+  'Tháng 10',
+  'Tháng 11',
+  'Tháng 12',
 ];
 
 interface ArchiveItem {
@@ -31,14 +41,12 @@ const allEntries: ArchiveItem[] = (
   await Promise.all(
     types.map(async (type) => {
       const entries = await getPublished(type);
-      return entries.map(
-        (entry): ArchiveItem => ({
-          title: entry.data.title,
-          href: `${TYPE_PATH[type]}/${entry.id}`,
-          type,
-          date: entry.data.publishDate,
-        }),
-      );
+      return entries.map((entry): ArchiveItem => ({
+        title: entry.data.title,
+        href: `${TYPE_PATH[type]}/${entry.id}`,
+        type,
+        date: entry.data.publishDate,
+      }));
     }),
   )
 ).flat();
@@ -78,38 +86,36 @@ for (const entry of allEntries) {
     <h1 class="text-4xl font-semibold text-(--color-text)">Archive</h1>
   </header>
 
-  {
-    years.length === 0 ? (
-      <p class="text-(--color-text-dim)">Chưa có nội dung nào.</p>
-    ) : (
-      <div class="flex flex-col gap-10">
-        {years.map((yearGroup) => (
-          <section>
-            <h2 class="mb-4 text-2xl font-semibold text-(--color-text)">{yearGroup.year}</h2>
-            <div class="flex flex-col gap-6">
-              {yearGroup.months.map((monthGroup) => (
-                <div>
-                  <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
-                    {MONTH_NAMES[monthGroup.month]}
-                  </p>
-                  <ul class="flex flex-col gap-1.5 border-l border-(--color-border) pl-4">
-                    {monthGroup.items.map((item) => (
-                      <li class="flex items-baseline gap-3 text-sm">
-                        <span class="font-mono text-xs text-(--color-text-dim)">
-                          {TYPE_LABEL[item.type]}
-                        </span>
-                        <a href={item.href} class="text-(--color-text) hover:text-(--color-accent)">
-                          {item.title}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
-    )
-  }
+  {years.length === 0 ? (
+    <p class="text-(--color-text-dim)">Chưa có nội dung nào.</p>
+  ) : (
+    <div class="flex flex-col gap-10">
+      {years.map((yearGroup) => (
+        <section>
+          <h2 class="mb-4 text-2xl font-semibold text-(--color-text)">{yearGroup.year}</h2>
+          <div class="flex flex-col gap-6">
+            {yearGroup.months.map((monthGroup) => (
+              <div>
+                <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+                  {MONTH_NAMES[monthGroup.month]}
+                </p>
+                <ul class="flex flex-col gap-1.5 border-l border-(--color-border) pl-4">
+                  {monthGroup.items.map((item) => (
+                    <li class="flex items-baseline gap-3 text-sm">
+                      <span class="font-mono text-xs text-(--color-text-dim)">
+                        {TYPE_LABEL[item.type]}
+                      </span>
+                      <a href={item.href} class="text-(--color-text) hover:text-(--color-accent)">
+                        {item.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )}
 </BaseLayout>

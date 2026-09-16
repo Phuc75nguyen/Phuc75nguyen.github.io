@@ -39,14 +39,12 @@ export async function getRecentAcrossCollections(limit: number): Promise<RecentI
   const perType = await Promise.all(
     types.map(async (type) => {
       const entries = await getPublished(type);
-      return entries.map(
-        (entry): RecentItem => ({
-          title: entry.data.title,
-          href: `${TYPE_PATH[type]}/${entry.id}`,
-          type,
-          publishDate: entry.data.publishDate,
-        }),
-      );
+      return entries.map((entry): RecentItem => ({
+        title: entry.data.title,
+        href: `${TYPE_PATH[type]}/${entry.id}`,
+        type,
+        publishDate: entry.data.publishDate,
+      }));
     }),
   );
   return perType

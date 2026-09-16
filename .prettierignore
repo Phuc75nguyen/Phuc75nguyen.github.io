@@ -1,0 +1,12 @@
+dist/
+.astro/
+node_modules/
+AI-Knowledge-Library/
+public/fonts/
+pnpm-lock.yaml
+package-lock.json
+
+# Project contract docs - Phuc's own files, never auto-reformat these
+BLUEPRINT.md
+CLAUDE.md
+PROMPTS.md

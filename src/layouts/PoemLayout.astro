@@ -30,7 +30,9 @@ const ogImage = `/og/poems/${id}.png`;
       <h1 class="font-serif text-3xl text-(--color-text)">{poem.title}</h1>
       {poem.collection && <p class="text-sm text-(--color-text-dim)">Tập: {poem.collection}</p>}
       <p class="text-sm text-(--color-text-dim)">{formatDate(poem.publishDate)}</p>
-      {poem.note && <p class="mt-2 max-w-md font-serif text-base italic text-(--color-text-dim)">{poem.note}</p>}
+      {poem.note && (
+        <p class="mt-2 max-w-md font-serif text-base italic text-(--color-text-dim)">{poem.note}</p>
+      )}
     </header>
 
     <div class="flex justify-center">

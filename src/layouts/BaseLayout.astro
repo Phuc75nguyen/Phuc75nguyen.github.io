@@ -33,6 +33,44 @@ const ogImageURL = new URL(ogImage, SITE.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- The sidebar avatar is a cross-origin GitHub image on every page;
+         open the connection early instead of only once the <img> tag is
+         parsed, so it doesn't compete with same-origin critical resources
+         for connection setup during the render-critical window. -->
+    <link rel="preconnect" href="https://avatars.githubusercontent.com" crossorigin />
+    <!-- The LCP element is a Vietnamese heading (font-semibold, 600) on
+         short pages, or a Vietnamese body paragraph (400) on long article
+         pages - preload both so the browser fetches whichever one is
+         needed in parallel with CSS instead of discovering it only after
+         CSS finishes parsing (Lighthouse LCP render-delay). -->
+    <link
+      rel="preload"
+      href="/fonts/be-vietnam-pro-600-normal-vietnamese.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/be-vietnam-pro-400-normal-vietnamese.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!--
+      Blocking, runs before first paint - avoids a flash of the wrong
+      theme/hidden-content state. Two unrelated jobs share one script only
+      because both need to land before paint: restore the saved theme
+      (dark stays default unless explicitly opted into light), and flag
+      "JS actually works" for the fade-up reveal CSS in global.css to key
+      off - so a no-JS visitor never gets content stuck at opacity: 0.
+    -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    </script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
@@ -50,7 +88,9 @@ const ogImageURL = new URL(ogImage, SITE.url);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
 
-    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+    {jsonLd && (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)}></script>
+    )}
   </head>
   <body class="min-h-screen">
     <a
@@ -59,10 +99,8 @@ const ogImageURL = new URL(ogImage, SITE.url);
     >
       Bỏ qua, vào nội dung chính
     </a>
-    <div class="mx-auto flex max-w-[1440px] lg:items-start lg:gap-8 lg:px-8">
-      <Sidebar
-        class="hidden lg:sticky lg:top-0 lg:block lg:h-screen lg:w-[280px] lg:shrink-0 lg:overflow-y-auto lg:px-2"
-      />
+    <div class="mx-auto flex max-w-[1440px] flex-col lg:flex-row lg:items-start lg:gap-8 lg:px-8">
+      <Sidebar class="hidden lg:sticky lg:top-0 lg:block lg:h-screen lg:w-[280px] lg:shrink-0 lg:overflow-y-auto lg:px-2" />
       <MobileDrawer />
       <div class="flex min-h-screen w-full flex-1 flex-col px-4 sm:px-6 lg:px-0">
         <main id="main-content" data-pagefind-body class="flex-1 py-8">
@@ -73,3 +111,38 @@ const ogImageURL = new URL(ogImage, SITE.url);
     </div>
   </body>
 </html>
+
+<script>
+  const toggles = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+  toggles.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  });
+
+  // Fade-up on scroll into view, once per element (BLUEPRINT Muc 5.4).
+  // The .js gate and prefers-reduced-motion guard live in global.css;
+  // this only ever adds a class, so it is harmless to run unconditionally.
+  const revealTargets = document.querySelectorAll('[data-reveal]');
+  if (revealTargets.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px' },
+    );
+    revealTargets.forEach((el) => observer.observe(el));
+  }
+</script>

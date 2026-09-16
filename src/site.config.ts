@@ -16,7 +16,11 @@ export const AUTHOR = {
   role: 'Data Scientist · MLOps Engineer',
   tagline: 'Tôi đọc paper, dựng hệ thống, và thỉnh thoảng làm thơ.',
   location: 'Việt Nam',
-  avatar: 'https://github.com/Phuc75nguyen.png',
+  // Direct avatars.githubusercontent.com URL, not github.com/<user>.png -
+  // that shortcut 302-redirects here anyway, so this skips a whole extra
+  // connection + redirect round trip, and (bonus) survives a GitHub
+  // username change since it's keyed by user id, not by @handle.
+  avatar: 'https://avatars.githubusercontent.com/u/115697411?v=4',
   email: 'phuc75nguyen@gmail.com',
 };
 

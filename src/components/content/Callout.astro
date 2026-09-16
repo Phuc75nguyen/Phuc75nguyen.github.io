@@ -8,10 +8,17 @@ interface Props {
 
 const { type = 'note' } = Astro.props;
 
-const CONFIG: Record<NonNullable<Props['type']>, { icon: string; label: string; border: string }> = {
+const CONFIG: Record<
+  NonNullable<Props['type']>,
+  { icon: string; label: string; border: string }
+> = {
   note: { icon: 'lucide:info', label: 'Ghi chú', border: 'border-l-(--color-accent-2)' },
   warning: { icon: 'lucide:alert-triangle', label: 'Lưu ý', border: 'border-l-(--color-accent)' },
-  critique: { icon: 'lucide:alert-triangle', label: 'Phản biện', border: 'border-l-(--color-accent)' },
+  critique: {
+    icon: 'lucide:alert-triangle',
+    label: 'Phản biện',
+    border: 'border-l-(--color-accent)',
+  },
   application: {
     icon: 'lucide:cog',
     label: 'Ứng dụng thực tế',
@@ -22,12 +29,7 @@ const CONFIG: Record<NonNullable<Props['type']>, { icon: string; label: string; 
 const { icon, label, border } = CONFIG[type];
 ---
 
-<div
-  class:list={[
-    'my-6 rounded-(--radius-card) border-l-4 bg-(--color-surface-2) p-5',
-    border,
-  ]}
->
+<div class:list={['my-6 rounded-(--radius-card) border-l-4 bg-(--color-surface-2) p-5', border]}>
   <p class="mb-2 flex items-center gap-2 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
     <Icon name={icon} class="size-4" aria-hidden="true" />
     {label}

@@ -27,9 +27,7 @@ export function buildScholarlyArticle(input: ScholarlyArticleInput) {
     ...(input.updatedDate ? { dateModified: input.updatedDate.toISOString() } : {}),
     url: absoluteUrl(input.url),
     image: absoluteUrl(input.image),
-    ...(input.keywords && input.keywords.length > 0
-      ? { keywords: input.keywords.join(', ') }
-      : {}),
+    ...(input.keywords && input.keywords.length > 0 ? { keywords: input.keywords.join(', ') } : {}),
     publisher: { '@type': 'Person', name: AUTHOR.name },
   };
 }

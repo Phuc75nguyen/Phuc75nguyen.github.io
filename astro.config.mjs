@@ -25,6 +25,13 @@ const MERMAID_DARK_THEME = {
     secondaryColor: '#141a22',
     tertiaryColor: '#0a0d12',
     fontFamily: 'JetBrains Mono, monospace',
+    // Mermaid derives edge-label colors from secondaryColor by its own
+    // formula rather than using it verbatim - that produced a ~4.4:1
+    // gray-on-gray pair (WCAG AA needs 4.5:1) on the edge labels
+    // specifically, invisible anywhere else on the site. Pin both
+    // explicitly instead of relying on the derived value.
+    edgeLabelBackground: '#1b232d', // --color-surface-2
+    textColor: '#e6eaf0', // --color-text
   },
 };
 

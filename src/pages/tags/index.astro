@@ -31,25 +31,27 @@ function sizeClass(count: number): string {
 }
 ---
 
-<BaseLayout title="Tags" description="Toàn bộ tag đang dùng trên site, cỡ chữ theo tần suất." room="lab">
+<BaseLayout
+  title="Tags"
+  description="Toàn bộ tag đang dùng trên site, cỡ chữ theo tần suất."
+  room="lab"
+>
   <header class="mb-8">
     <h1 class="text-4xl font-semibold text-(--color-text)">Tags</h1>
   </header>
-  {
-    tags.length === 0 ? (
-      <p class="text-(--color-text-dim)">Chưa có tag nào.</p>
-    ) : (
-      <div class="flex flex-wrap items-baseline gap-x-5 gap-y-3">
-        {tags.map(([tag, count]) => (
-          <a
-            href={`/tags/${slugify(tag)}`}
-            class:list={[sizeClass(count), 'text-(--color-text-dim) hover:text-(--color-accent)']}
-          >
-            #{tag}
-            <span class="ml-1 font-mono text-xs text-(--color-text-dim)">{count}</span>
-          </a>
-        ))}
-      </div>
-    )
-  }
+  {tags.length === 0 ? (
+    <p class="text-(--color-text-dim)">Chưa có tag nào.</p>
+  ) : (
+    <div class="flex flex-wrap items-baseline gap-x-5 gap-y-3">
+      {tags.map(([tag, count]) => (
+        <a
+          href={`/tags/${slugify(tag)}`}
+          class:list={[sizeClass(count), 'text-(--color-text-dim) hover:text-(--color-accent)']}
+        >
+          #{tag}
+          <span class="ml-1 font-mono text-xs text-(--color-text-dim)">{count}</span>
+        </a>
+      ))}
+    </div>
+  )}
 </BaseLayout>

@@ -46,9 +46,13 @@ function formatDate(date: Date): string {
     role="group"
     aria-label="Lọc theo chuyên mục"
   >
-    <Chip value="all" active={true} class="js-filter-chip">Tất cả</Chip>
+    <Chip value="all" active={true} class="js-filter-chip">
+      Tất cả
+    </Chip>
     {CATEGORIES.map((category) => (
-      <Chip value={category} class="js-filter-chip">{category}</Chip>
+      <Chip value={category} class="js-filter-chip">
+        {category}
+      </Chip>
     ))}
   </div>
 
@@ -58,58 +62,60 @@ function formatDate(date: Date): string {
     </p>
   </noscript>
 
-  {
-    page.data.length === 0 ? (
-      <p class="text-(--color-text-dim)">Chưa có ghi chép nào.</p>
-    ) : (
-      <div class="flex flex-col gap-4">
-        {page.data.map((entry) => (
-          <div class="js-note-item" data-category={entry.data.category}>
-            <Card href={`/notes/${entry.id}`} class="flex flex-col gap-2">
-              <div class="flex flex-wrap items-center gap-2">
-                <Badge tone="accent">{entry.data.category}</Badge>
-                <span class="font-mono text-xs text-(--color-text-dim)">
-                  {formatDate(entry.data.publishDate)}
-                </span>
-              </div>
-              <h2 class="text-lg font-semibold text-(--color-text)">{entry.data.title}</h2>
-              <p class="text-sm text-(--color-text-dim)">{entry.data.description}</p>
-            </Card>
-          </div>
-        ))}
-      </div>
-    )
-  }
+  {page.data.length === 0 ? (
+    <p class="text-(--color-text-dim)">Chưa có ghi chép nào.</p>
+  ) : (
+    <div class="flex flex-col gap-4">
+      {page.data.map((entry) => (
+        <div class="js-note-item" data-reveal data-category={entry.data.category}>
+          <Card href={`/notes/${entry.id}`} class="flex flex-col gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <Badge tone="accent">{entry.data.category}</Badge>
+              <span class="font-mono text-xs text-(--color-text-dim)">
+                {formatDate(entry.data.publishDate)}
+              </span>
+            </div>
+            <h2 class="text-lg font-semibold text-(--color-text)">{entry.data.title}</h2>
+            <p class="text-sm text-(--color-text-dim)">{entry.data.description}</p>
+          </Card>
+        </div>
+      ))}
+    </div>
+  )}
 
-  <p id="empty-state" class="mt-6 hidden text-(--color-text-dim)">Không có ghi chép nào khớp bộ lọc.</p>
+  <p id="empty-state" class="mt-6 hidden text-(--color-text-dim)">
+    Không có ghi chép nào khớp bộ lọc.
+  </p>
 
-  {
-    page.lastPage > 1 && (
-      <nav aria-label="Phân trang" class="mt-10 flex items-center justify-between text-sm">
-        {page.url.prev ? (
-          <a href={page.url.prev} class="text-(--color-accent) hover:underline">
-            ← Trang trước
-          </a>
-        ) : (
-          <span />
-        )}
-        <span class="text-(--color-text-dim)">
-          Trang {page.currentPage}/{page.lastPage}
-        </span>
-        {page.url.next ? (
-          <a href={page.url.next} class="text-(--color-accent) hover:underline">
-            Trang sau →
-          </a>
-        ) : (
-          <span />
-        )}
-      </nav>
-    )
-  }
+  {page.lastPage > 1 && (
+    <nav aria-label="Phân trang" class="mt-10 flex items-center justify-between text-sm">
+      {page.url.prev ? (
+        <a href={page.url.prev} class="text-(--color-accent) hover:underline">
+          ← Trang trước
+        </a>
+      ) : (
+        <span />
+      )}
+      <span class="text-(--color-text-dim)">
+        Trang {page.currentPage}/{page.lastPage}
+      </span>
+      {page.url.next ? (
+        <a href={page.url.next} class="text-(--color-accent) hover:underline">
+          Trang sau →
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )}
 </BaseLayout>
 
 <script>
-  const CHIP_ACTIVE = ['border-(--color-accent)', 'bg-(--color-accent)/15', 'text-(--color-accent)'];
+  const CHIP_ACTIVE = [
+    'border-(--color-accent)',
+    'bg-(--color-accent)/15',
+    'text-(--color-accent)',
+  ];
   const CHIP_INACTIVE = ['border-(--color-border)', 'text-(--color-text-dim)'];
 
   const params = new URLSearchParams(window.location.search);

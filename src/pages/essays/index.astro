@@ -18,25 +18,25 @@ function formatDate(date: Date): string {
     <h1 class="font-serif text-4xl text-(--color-text)">Essays</h1>
   </header>
 
-  {
-    essays.length === 0 ? (
-      <p class="mx-auto max-w-2xl text-center text-(--color-text-dim)">Chưa có bài viết nào.</p>
-    ) : (
-      <ul class="mx-auto flex max-w-2xl flex-col divide-y divide-(--color-border)">
-        {essays.map((entry) => (
-          <li class="py-6">
-            <a href={`/essays/${entry.id}`} class="group flex flex-col gap-1">
-              <span class="font-serif text-2xl text-(--color-text) group-hover:text-(--color-accent)">
-                {entry.data.title}
-              </span>
-              {entry.data.subtitle && <span class="text-(--color-text-dim)">{entry.data.subtitle}</span>}
-              <span class="text-sm text-(--color-text-dim)">
-                {entry.data.theme} · {formatDate(entry.data.publishDate)}
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    )
-  }
+  {essays.length === 0 ? (
+    <p class="mx-auto max-w-2xl text-center text-(--color-text-dim)">Chưa có bài viết nào.</p>
+  ) : (
+    <ul class="mx-auto flex max-w-2xl flex-col divide-y divide-(--color-border)">
+      {essays.map((entry) => (
+        <li data-reveal class="py-6">
+          <a href={`/essays/${entry.id}`} class="group flex flex-col gap-1">
+            <span class="font-serif text-2xl text-(--color-text) group-hover:text-(--color-accent)">
+              {entry.data.title}
+            </span>
+            {entry.data.subtitle && (
+              <span class="text-(--color-text-dim)">{entry.data.subtitle}</span>
+            )}
+            <span class="text-sm text-(--color-text-dim)">
+              {entry.data.theme} · {formatDate(entry.data.publishDate)}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
 </BaseLayout>

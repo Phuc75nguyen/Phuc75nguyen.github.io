@@ -1,4 +1,5 @@
 ---
+import 'katex/dist/katex.min.css';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import PaperMeta from '../components/content/PaperMeta.astro';
@@ -50,7 +51,13 @@ const jsonLd = buildScholarlyArticle({
 });
 ---
 
-<BaseLayout title={paper.title} description={paper.tldr} room="lab" ogImage={ogImage} jsonLd={jsonLd}>
+<BaseLayout
+  title={paper.title}
+  description={paper.tldr}
+  room="lab"
+  ogImage={ogImage}
+  jsonLd={jsonLd}
+>
   <ReadingProgress />
   <div class="flex gap-8">
     <article class="min-w-0 flex-1">
@@ -85,41 +92,39 @@ const jsonLd = buildScholarlyArticle({
         <slot />
       </div>
 
-      <blockquote
-        class="my-10 rounded-(--radius-card) border border-(--color-accent)/30 bg-(--color-surface) p-6 text-lg text-(--color-text)"
-      >
-        <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-accent)">Nhận định</p>
+      <blockquote class="my-10 rounded-(--radius-card) border border-(--color-accent)/30 bg-(--color-surface) p-6 text-lg text-(--color-text)">
+        <p class="mb-2 font-mono text-xs uppercase tracking-wide text-(--color-accent)">
+          Nhận định
+        </p>
         {paper.verdict}
       </blockquote>
 
       {paper.series && <SeriesNav collection="papers" series={paper.series} currentId={id} />}
 
-      {
-        paper.tags.length > 0 && (
-          <div class="mb-10 flex flex-wrap gap-2">
-            {paper.tags.map((tag) => (
-              <Tag tag={tag} />
-            ))}
-          </div>
-        )
-      }
+      {paper.tags.length > 0 && (
+        <div class="mb-10 flex flex-wrap gap-2">
+          {paper.tags.map((tag) => (
+            <Tag tag={tag} />
+          ))}
+        </div>
+      )}
 
-      {
-        relatedPapers.length > 0 && (
-          <div class="border-t border-(--color-border) pt-6">
-            <p class="mb-3 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">Bài liên quan</p>
-            <ul class="flex flex-col gap-2">
-              {relatedPapers.map((rp) => (
-                <li>
-                  <a href={rp.href} class="text-(--color-accent) hover:underline">
-                    {rp.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
-      }
+      {relatedPapers.length > 0 && (
+        <div class="border-t border-(--color-border) pt-6">
+          <p class="mb-3 font-mono text-xs uppercase tracking-wide text-(--color-text-dim)">
+            Bài liên quan
+          </p>
+          <ul class="flex flex-col gap-2">
+            {relatedPapers.map((rp) => (
+              <li>
+                <a href={rp.href} class="text-(--color-accent) hover:underline">
+                  {rp.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </article>
 
     <aside class="hidden w-[240px] shrink-0 xl:block">
