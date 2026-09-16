@@ -28,3 +28,8 @@ pnpm-debug.log*
 
 # separate repo — kept out of this repo on purpose, see BLUEPRINT.md Mục 3.3
 AI-Knowledge-Library/
+
+# internal planning docs — stay local, not published to the public repo
+BLUEPRINT.md
+CLAUDE.md
+PROMPTS.md

@@ -1,7 +1,6 @@
 # Phuc75nguyen.github.io
 
 Blog cá nhân + thư viện phân tích paper AI/ML của Nguyễn Tấn Phúc.
-Đặc tả gốc: [`BLUEPRINT.md`](./BLUEPRINT.md). Quy tắc làm việc với AI: [`CLAUDE.md`](./CLAUDE.md).
 
 Site tĩnh, build bằng [Astro](https://astro.build), deploy tự động lên GitHub Pages qua GitHub
 Actions mỗi khi push lên `main`. Không server, không database — mọi nội dung là file `.mdx` trong
